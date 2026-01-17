@@ -1,0 +1,61 @@
+import { notFound } from 'next/navigation'
+import './team.css'
+
+// Team configuration - you can update these with actual Google Sheet URLs
+const teamSheets: Record<string, string> = {
+    '1': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '2': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '3': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '4': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '5': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '6': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '7': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '8': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '9': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '10': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+}
+
+const teamNames: Record<string, string> = {
+    '1': 'The Gnats',
+    '2': 'A Team Has No Name',
+    '3': 'Compete Ass',
+    '4': 'Frodo Tea Baggins',
+    '5': 'M@',
+    '6': 'Uncle Rico Dynamite',
+    '7': 'Keepers Are Gay',
+    '8': 'ZiegenBrock',
+    '9': 'Golden Shower',
+    '10': 'DDT',
+}
+
+interface TeamPageProps {
+    params: {
+        teamId: string
+    }
+}
+
+export default function TeamPage({ params }: TeamPageProps) {
+    const { teamId } = params
+    const sheetUrl = teamSheets[teamId]
+    const teamName = teamNames[teamId]
+
+    if (!sheetUrl || !teamName) {
+        notFound()
+    }
+
+    return (
+        <div className="container">
+            <div className="team-header">
+                <h1 className="team-title">{teamName} Statistics</h1>
+            </div>
+
+            <div className="sheet-container">
+                <iframe
+                    src={sheetUrl}
+                    className="stats-sheet"
+                    title={`${teamName} Statistics`}
+                />
+            </div>
+        </div>
+    )
+}
