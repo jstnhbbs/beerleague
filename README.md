@@ -80,3 +80,4 @@ Then visit `http://localhost:3000/beerleague`
   - `Navigation.tsx` - Navigation bar
 - `.github/workflows/` - GitHub Actions workflows
   - `deploy.yml` - Automatic deployment to GitHub Pages
+# Trigger deployment
