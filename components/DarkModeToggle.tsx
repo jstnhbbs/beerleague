@@ -5,8 +5,10 @@ import './DarkModeToggle.css'
 
 export default function DarkModeToggle() {
     const [isDark, setIsDark] = useState(false)
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
+        setMounted(true)
         // Check localStorage and system preference
         const stored = localStorage.getItem('theme')
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -16,6 +18,17 @@ export default function DarkModeToggle() {
         updateTheme(shouldBeDark)
     }, [])
 
+    const updateTheme = (dark: boolean) => {
+        const root = document.documentElement
+        if (dark) {
+            root.classList.add('dark')
+            root.classList.remove('light')
+        } else {
+            root.classList.remove('dark')
+            root.classList.add('light')
+        }
+    }
+
     const toggleDarkMode = () => {
         const newIsDark = !isDark
         setIsDark(newIsDark)
@@ -23,12 +36,15 @@ export default function DarkModeToggle() {
         localStorage.setItem('theme', newIsDark ? 'dark' : 'light')
     }
 
-    const updateTheme = (dark: boolean) => {
-        if (dark) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
+    if (!mounted) {
+        return (
+            <button
+                className="dark-mode-toggle"
+                aria-label="Toggle dark mode"
+            >
+                🌙
+            </button>
+        )
     }
 
     return (

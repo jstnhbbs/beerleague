@@ -37,8 +37,18 @@ body {
     --text-secondary: #9ca3af;
 }
 
+:root.light {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --card-bg: #ffffff;
+    --text-secondary: #6b7280;
+}
+
 @media (prefers-color-scheme: dark) {
-    :root:not(.light) {
+    :root:not(.light):not(.dark) {
         --foreground-rgb: 255, 255, 255;
         --background-start-rgb: 17, 24, 39;
         --background-end-rgb: 17, 24, 39;
