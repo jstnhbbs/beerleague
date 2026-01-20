@@ -34,6 +34,13 @@ interface TeamPageProps {
     }
 }
 
+// Generate static params for all teams at build time
+export function generateStaticParams() {
+    return Array.from({ length: 10 }, (_, i) => ({
+        teamId: String(i + 1),
+    }))
+}
+
 export default function TeamPage({ params }: TeamPageProps) {
     const { teamId } = params
     const sheetUrl = teamSheets[teamId]
