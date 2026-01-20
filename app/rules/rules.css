@@ -1,61 +1,61 @@
 .rules-container {
-  max-width: 800px;
-  margin: 0 auto;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .rules-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  text-align: center;
-  color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--primary-color);
 }
 
 .rules-content {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 2.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .rule-section {
-  margin-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .rule-section:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .rule-section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
-  padding-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
 }
 
 .rule-section p {
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
 }
 
 .rule-section ul {
-  list-style-position: inside;
-  line-height: 1.8;
-  color: var(--text-secondary);
+    list-style-position: inside;
+    line-height: 1.8;
+    color: var(--text-secondary);
 }
 
 .rule-section ul li {
-  margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 @media (max-width: 768px) {
-  .rules-content {
-    padding: 1.5rem;
-  }
-  
-  .rules-title {
-    font-size: 2rem;
-  }
+    .rules-content {
+        padding: 1.5rem;
+    }
+
+    .rules-title {
+        font-size: 2rem;
+    }
 }
