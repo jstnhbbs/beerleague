@@ -38,7 +38,7 @@ interface TeamPageProps {
 
 export async function generateStaticParams() {
     // Replace with logic to retrieve your team IDs, e.g., from a database or data file
-    const teams = [{ teamId: '1' }, { teamId: '2' }]; // Example
+    const teams = [{ teamId: '1' }, { teamId: '2' }, { teamId: '3' }, { teamId: '4' }, { teamId: '5' }, { teamId: '6' }, { teamId: '7' }, { teamId: '8' }, { teamId: '9' }, { teamId: '10' }]; 
   
     return teams.map(team => ({
       teamId: team.teamId,
