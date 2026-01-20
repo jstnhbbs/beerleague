@@ -23,14 +23,23 @@ export default function Home() {
             </div>
 
             <div className="teams-grid">
-                {teams.map((team) => (
-                    <Link key={team.id} href={`/teams/${team.id}`} className="team-card">
-                        <div className="team-card-content">
-                            <h2>{team.name}</h2>
-                            <p>View Stats →</p>
-                        </div>
-                    </Link>
-                ))}
+                {teams.map((team) => {
+                    // Add 'featured' class to teams you want to distinguish (change IDs as needed)
+                    const isWinner = team.id === '6' 
+                    const isLoser = team.id === '8'
+                    return (
+                        <Link
+                            key={team.id}
+                            href={`/teams/${team.id}`}
+                            className={`team-card ${isWinner ? 'team-card-winner' : isLoser ? 'team-card-loser' : ''}`}
+                        >
+                            <div className="team-card-content">
+                                <h2>{team.name}</h2>
+                                <p>View Stats →</p>
+                            </div>
+                        </Link>
+                    )
+                })}
             </div>
         </div>
     )

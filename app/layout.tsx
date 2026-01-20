@@ -16,8 +16,24 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body className={inter.className}>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            (function() {
+                                try {
+                                    const stored = localStorage.getItem('theme');
+                                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                                    const shouldBeDark = stored === 'dark' || (!stored && prefersDark);
+                                    if (shouldBeDark) {
+                                        document.documentElement.classList.add('dark');
+                                    }
+                                } catch (e) {}
+                            })();
+                        `,
+                    }}
+                />
                 <Navigation />
                 <main>{children}</main>
             </body>

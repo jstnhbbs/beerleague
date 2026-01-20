@@ -46,12 +46,77 @@
 .team-card-content h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .team-card-content p {
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+/* winner team cards - distinguished styling */
+.team-card-winner {
+    border: 2px solid #FFD700;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 215, 0, 0.1) 100%);
+    box-shadow: 0 8px 16px -4px rgba(255, 215, 0, 0.3), 0 4px 8px -2px rgba(255, 215, 0, 0.2);
+    position: relative;
+}
+
+.team-card-winner::before {
+    content: '🏆';
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 1.25rem;
+    opacity: 0.8;
+}
+
+.team-card-winner:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px -4px rgba(255, 215, 0, 0.4), 0 6px 12px -2px rgba(255, 215, 0, 0.3);
+    border-color: #FFA500;
+}
+
+.team-card-winner .team-card-content h2 {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* loser team cards - distinguished styling */
+.team-card-loser {
+    border: 2px solid #8B4513;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(139, 69, 19, 0.1) 100%);
+    box-shadow: 0 8px 16px -4px rgba(139, 69, 19, 0.3), 0 4px 8px -2px rgba(139, 69, 19, 0.2);
+    position: relative;
+}
+
+.team-card-loser::before {
+    content: '💩';
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 1.25rem;
+    opacity: 0.8;
+}
+
+.team-card-loser:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px -4px rgba(139, 69, 19, 0.4), 0 6px 12px -2px rgba(139, 69, 19, 0.3);
+    border-color: #654321;
+}
+
+.team-card-loser .team-card-content h2 {
+    background: linear-gradient(135deg, #8B4513, #654321);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
 }
 
 @media (max-width: 768px) {

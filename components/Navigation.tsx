@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import './Navigation.css'
+import DarkModeToggle from './DarkModeToggle'
 
 export default function Navigation() {
     return (
@@ -15,6 +16,7 @@ export default function Navigation() {
                     <Link href="/rules" className="nav-link">
                         Rules
                     </Link>
+                    <DarkModeToggle />
                 </div>
             </div>
         </nav>
