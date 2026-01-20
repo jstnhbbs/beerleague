@@ -7,12 +7,12 @@ const teamSheets: Record<string, string> = {
     '2': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=1100028925&single=true',
     '3': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=581855790&single=true',
     '4': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=505574005&single=true',
-    '5': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
-    '6': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
-    '7': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
-    '8': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
-    '9': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
-    '10': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?widget=true&headers=false',
+    '5': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=952501783&single=true',
+    '6': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=46682007&single=true',
+    '7': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=556986276&single=true',
+    '8': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=556170910&single=true',
+    '9': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=1328878134&single=true',
+    '10': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ31Kptl6d-ElO2JuEQajDZZt18AGtCcxJ0fKSjEdOYuHb5cyqXFNaj5rG1YGVNt3kScTWtXyIFBmif/pubhtml?gid=1519094887&single=true',
 }
 
 const teamNames: Record<string, string> = {
