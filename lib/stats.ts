@@ -135,7 +135,17 @@ export function rankManagers(
         if (b.stats.championships !== a.stats.championships) {
             return b.stats.championships - a.stats.championships
         }
-        return a.name.localeCompare(b.name)
+        const aWinPct = winPct(
+            a.stats.totalWins,
+            a.stats.totalLosses,
+            a.stats.totalTies
+        )
+        const bWinPct = winPct(
+            b.stats.totalWins,
+            b.stats.totalLosses,
+            b.stats.totalTies
+        )
+        return bWinPct - aWinPct
     })
 }
 

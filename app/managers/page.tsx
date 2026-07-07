@@ -14,7 +14,8 @@ export default async function ManagersPage() {
                 <p className="almanac-eyebrow">Career Leaders</p>
                 <h1 className="almanac-title">Manager Rankings</h1>
                 <p className="almanac-subtitle">
-                    Sorted by seasons played, then championships won.
+                    Sorted by seasons played, then championships, then career
+                    win percentage.
                 </p>
             </header>
 
