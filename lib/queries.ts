@@ -4,7 +4,7 @@ import { managers, seasonEntries, seasons } from '@/lib/db/schema'
 import {
     buildChampionshipViews,
     computeManagerCareerStats,
-    rankManagersByPowerRating,
+    rankManagers,
     type ManagerCareerStats,
     type ManagerSeasonView,
 } from '@/lib/stats'
@@ -57,7 +57,7 @@ export async function getManagerRankings() {
         byManager.set(row.entry.managerId, existing)
     }
 
-    const ranked = rankManagersByPowerRating(
+    const ranked = rankManagers(
         Array.from(byManager.entries()).map(([managerId, value]) => ({
             managerId,
             name: value.name,

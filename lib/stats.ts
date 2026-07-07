@@ -125,14 +125,17 @@ export function computeManagerCareerStats(
     }
 }
 
-export function rankManagersByPowerRating(
+export function rankManagers(
     rows: Array<{ managerId: number; stats: ManagerCareerStats; name: string }>
 ) {
     return [...rows].sort((a, b) => {
-        const aRating = a.stats.avgPowerRating ?? -Infinity
-        const bRating = b.stats.avgPowerRating ?? -Infinity
-        if (bRating !== aRating) return bRating - aRating
-        return b.stats.totalWins - a.stats.totalWins
+        if (b.stats.seasons !== a.stats.seasons) {
+            return b.stats.seasons - a.stats.seasons
+        }
+        if (b.stats.championships !== a.stats.championships) {
+            return b.stats.championships - a.stats.championships
+        }
+        return a.name.localeCompare(b.name)
     })
 }
 
