@@ -155,9 +155,18 @@ function parseManagerSheet(
     return parsed
 }
 
+interface YearStandingsIndex {
+    teamByYearFinish: Map<string, string>
+    teamByYearPowerRating: Map<string, string>
+}
+
+function powerRatingKey(value: number): string {
+    return value.toFixed(7)
+}
+
 function parseYearByYearStandings(
     sheet: XLSX.WorkSheet
-): Map<string, string> {
+): YearStandingsIndex {
     const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
         header: 1,
         defval: '',
@@ -165,34 +174,45 @@ function parseYearByYearStandings(
     })
 
     const teamByYearFinish = new Map<string, string>()
+    const teamByYearPowerRating = new Map<string, string>()
     let currentYear: number | null = null
 
     for (const row of rows) {
         if (!Array.isArray(row)) continue
 
-        const maybeYear = parseYear(row[1])
-        if (maybeYear && cellString(row, 2) === '') {
+        const maybeYear = parseYear(row[0])
+        if (maybeYear && cellString(row, 2) === 'Record') {
             currentYear = maybeYear
             continue
         }
 
         if (!currentYear) continue
 
-        const rankText = cellString(row, 1)
+        const rankText = cellString(row, 0)
         if (!rankText || rankText.toLowerCase() === 'rank') continue
-        if (rankText.toLowerCase() === 'average') {
+        if (rankText.toLowerCase() === 'average' || cellString(row, 1) === 'Average') {
             currentYear = null
             continue
         }
 
         const finish = parseFinish(rankText)
-        const teamName = cellString(row, 2)
-        if (finish === null || !teamName) continue
+        const teamName = cellString(row, 1)
+        const powerRating = parseNumber(row[2])
 
-        teamByYearFinish.set(`${currentYear}:${finish}`, teamName)
+        if (finish === null) continue
+
+        if (teamName) {
+            teamByYearFinish.set(`${currentYear}:${finish}`, teamName)
+            if (powerRating !== null) {
+                teamByYearPowerRating.set(
+                    `${currentYear}:${powerRatingKey(powerRating)}`,
+                    teamName
+                )
+            }
+        }
     }
 
-    return teamByYearFinish
+    return { teamByYearFinish, teamByYearPowerRating }
 }
 
 function parseChampionships(
@@ -208,9 +228,9 @@ function parseChampionships(
 
     for (const row of rows) {
         if (!Array.isArray(row)) continue
-        const year = parseYear(row[1])
-        const teamName = cellString(row, 4)
-        const managerName = cellString(row, 5)
+        const year = parseYear(row[0])
+        const teamName = cellString(row, 3)
+        const managerName = cellString(row, 4)
         if (!year || !teamName || !managerName) continue
         champions.set(`${year}:${managerName.toLowerCase()}`, {
             teamName,
@@ -221,18 +241,51 @@ function parseChampionships(
     return champions
 }
 
+function parseOverallManagerRankings(
+    sheet: XLSX.WorkSheet
+): Map<string, string> {
+    const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+        header: 1,
+        defval: '',
+        raw: true,
+    })
+
+    const currentTeamByManager = new Map<string, string>()
+
+    for (const row of rows) {
+        if (!Array.isArray(row)) continue
+
+        const managerName = cellString(row, 1)
+        const teamName = cellString(row, 2)
+        if (!managerName || !teamName) continue
+        if (managerName.toLowerCase().startsWith('template')) continue
+
+        currentTeamByManager.set(managerName.toLowerCase(), teamName)
+    }
+
+    return currentTeamByManager
+}
+
 function resolveTeamName(
     year: number,
     finish: number,
+    powerRating: number | null,
     managerName: string,
-    teamByYearFinish: Map<string, string>,
+    standings: YearStandingsIndex,
     champions: Map<string, { teamName: string; managerName: string }>
 ): string {
     const champion = champions.get(`${year}:${managerName.toLowerCase()}`)
     if (champion) return champion.teamName
 
-    const fromStandings = teamByYearFinish.get(`${year}:${finish}`)
+    const fromStandings = standings.teamByYearFinish.get(`${year}:${finish}`)
     if (fromStandings) return fromStandings
+
+    if (powerRating !== null) {
+        const fromPowerRating = standings.teamByYearPowerRating.get(
+            `${year}:${powerRatingKey(powerRating)}`
+        )
+        if (fromPowerRating) return fromPowerRating
+    }
 
     return `${managerName} (${year})`
 }
@@ -244,10 +297,13 @@ async function main() {
         '/Users/justinhobbs/Downloads/Beer League History.xlsx'
 
     const workbook = XLSX.readFile(spreadsheetPath)
-    const teamByYearFinish = parseYearByYearStandings(
+    const standings = parseYearByYearStandings(
         workbook.Sheets['Year by Year Standings']
     )
     const champions = parseChampionships(workbook.Sheets['Championship Seasons'])
+    const currentTeamByManager = parseOverallManagerRankings(
+        workbook.Sheets['Overall Manager Rankings']
+    )
 
     const managerSheetNames = workbook.SheetNames.filter(
         (name) => !SYSTEM_SHEETS.has(name)
@@ -269,6 +325,8 @@ async function main() {
             .values({
                 name: sheetName,
                 slug,
+                currentTeamName:
+                    currentTeamByManager.get(sheetName.toLowerCase()) ?? null,
                 createdAt: new Date().toISOString(),
             })
             .returning({ id: managers.id })
@@ -305,8 +363,9 @@ async function main() {
             const teamName = resolveTeamName(
                 row.year,
                 row.finish,
+                row.powerRating,
                 sheetName,
-                teamByYearFinish,
+                standings,
                 champions
             )
 

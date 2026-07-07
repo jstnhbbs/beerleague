@@ -36,7 +36,8 @@ export interface ManagerSeasonView extends SeasonEntry {
 
 export function computeManagerCareerStats(
     managerId: number,
-    entries: ManagerSeasonView[]
+    entries: ManagerSeasonView[],
+    currentTeamName?: string | null
 ): ManagerCareerStats {
     const sorted = [...entries].sort((a, b) => b.year - a.year)
 
@@ -121,7 +122,8 @@ export function computeManagerCareerStats(
                 : null,
         tenWinSeasons,
         mostWinsInSeason,
-        currentTeamName: sorted[0]?.teamName ?? null,
+        currentTeamName:
+            currentTeamName ?? sorted[0]?.teamName ?? null,
     }
 }
 

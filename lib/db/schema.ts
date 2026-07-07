@@ -4,6 +4,7 @@ export const managers = sqliteTable('managers', {
     id: integer('id').primaryKey({ autoIncrement: true }),
     name: text('name').notNull(),
     slug: text('slug').notNull().unique(),
+    currentTeamName: text('current_team_name'),
     createdAt: text('created_at').notNull(),
 })
 

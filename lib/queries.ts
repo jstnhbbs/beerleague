@@ -29,6 +29,7 @@ async function getSeasonEntriesWithYear() {
             year: seasons.year,
             managerName: managers.name,
             managerSlug: managers.slug,
+            managerCurrentTeamName: managers.currentTeamName,
         })
         .from(seasonEntries)
         .innerJoin(seasons, eq(seasonEntries.seasonId, seasons.id))
@@ -43,6 +44,7 @@ export async function getManagerRankings() {
         {
             name: string
             slug: string
+            currentTeamName: string | null
             entries: ManagerSeasonView[]
         }
     >()
@@ -51,6 +53,7 @@ export async function getManagerRankings() {
         const existing = byManager.get(row.entry.managerId) ?? {
             name: row.managerName,
             slug: row.managerSlug,
+            currentTeamName: row.managerCurrentTeamName,
             entries: [],
         }
         existing.entries.push({ ...row.entry, year: row.year })
@@ -61,7 +64,11 @@ export async function getManagerRankings() {
         Array.from(byManager.entries()).map(([managerId, value]) => ({
             managerId,
             name: value.name,
-            stats: computeManagerCareerStats(managerId, value.entries),
+            stats: computeManagerCareerStats(
+                managerId,
+                value.entries,
+                value.currentTeamName
+            ),
         }))
     )
 
@@ -96,7 +103,11 @@ export async function getManagerProfile(slug: string) {
     return {
         manager,
         entries,
-        stats: computeManagerCareerStats(manager.id, entries),
+        stats: computeManagerCareerStats(
+            manager.id,
+            entries,
+            manager.currentTeamName
+        ),
     }
 }
 
