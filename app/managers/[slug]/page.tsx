@@ -5,6 +5,8 @@ import { formatCareerRecord, formatCareerWinPct } from '@/lib/stats'
 import { formatRecord } from '@/lib/utils'
 import '../../almanac.css'
 
+export { dynamic } from '@/lib/db/route-config'
+
 interface ManagerPageProps {
     params: {
         slug: string

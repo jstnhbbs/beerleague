@@ -3,6 +3,8 @@ import { getManagerRankings } from '@/lib/queries'
 import { formatCareerRecord, formatCareerWinPct } from '@/lib/stats'
 import '../almanac.css'
 
+export { dynamic } from '@/lib/db/route-config'
+
 export default async function ManagersPage() {
     const rankings = await getManagerRankings()
 

@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { getAllSeasonYears } from '@/lib/queries'
 import '../almanac.css'
 
+export { dynamic } from '@/lib/db/route-config'
+
 export default async function SeasonsPage() {
     const years = await getAllSeasonYears()
 

@@ -4,6 +4,8 @@ import { getSeasonStandings } from '@/lib/queries'
 import { formatRecord } from '@/lib/utils'
 import '../../almanac.css'
 
+export { dynamic } from '@/lib/db/route-config'
+
 interface SeasonPageProps {
     params: {
         year: string
