@@ -1,0 +1,350 @@
+import * as XLSX from 'xlsx'
+import { db } from '../lib/db'
+import { managers, seasonEntries, seasons } from '../lib/db/schema'
+import { parseBool, parseNumber, slugify } from '../lib/utils'
+
+const SYSTEM_SHEETS = new Set([
+    'Overall Manager Rankings',
+    'Rankings Legend',
+    'Year by Year Standings',
+    'Championship Seasons',
+    'Head-2-Head Records',
+    'Playoff Odds',
+    'Individual Seasons',
+    'League Records',
+    'Copy of POINTS',
+    'BLANK',
+    'New Manager 1',
+    'New Manager 2',
+])
+
+const SKIP_ROW_LABELS = new Set([
+    'total',
+    'avg.',
+    'average:',
+    'best',
+    'worst',
+    'h2h',
+    'best/most:',
+    'worst/least:',
+])
+
+interface ParsedSeasonRow {
+    year: number
+    finish: number
+    powerRating: number | null
+    gamesPlayed: number
+    wins: number
+    losses: number
+    ties: number
+    moves: number
+    pointsFor: number
+    pointsAgainst: number
+    pointsForGameHigh: number | null
+    pointsForGameLow: number | null
+    regularSeasonWins: number
+    regularSeasonLosses: number
+    regularSeasonTies: number
+    playoffAppearance: boolean
+    playoffBye: boolean
+    playoffWins: number
+    playoffLosses: number
+    championshipWon: boolean
+}
+
+interface YearStandingRow {
+    year: number
+    finish: number
+    teamName: string
+}
+
+function cellValue(row: unknown[], index: number): unknown {
+    return row[index]
+}
+
+function cellString(row: unknown[], index: number): string {
+    const value = cellValue(row, index)
+    if (value === null || value === undefined) return ''
+    return String(value).trim()
+}
+
+function parseYear(value: unknown): number | null {
+    const num = parseNumber(value)
+    if (num === null) return null
+    const year = Math.round(num)
+    if (year < 2000 || year > 2100) return null
+    return year
+}
+
+function parseFinish(value: unknown): number | null {
+    const text = String(value ?? '').trim()
+    const match = text.match(/\d+/)
+    if (!match) return null
+    return Number(match[0])
+}
+
+function parseManagerSheet(
+    sheet: XLSX.WorkSheet,
+    managerName: string
+): ParsedSeasonRow[] {
+    const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+        header: 1,
+        defval: '',
+        raw: true,
+    })
+
+    const parsed: ParsedSeasonRow[] = []
+
+    for (const row of rows) {
+        if (!Array.isArray(row)) continue
+
+        const yearLabel = cellString(row, 0).toLowerCase()
+        if (SKIP_ROW_LABELS.has(yearLabel)) break
+        if (!yearLabel) continue
+
+        const year = parseYear(row[0])
+        if (!year) continue
+
+        const finish = parseFinish(row[2])
+        const wins = parseNumber(row[4])
+        const losses = parseNumber(row[5])
+        const pointsFor = parseNumber(row[9])
+        const pointsAgainst = parseNumber(row[13])
+        const regularSeasonWins = parseNumber(row[18])
+        const regularSeasonLosses = parseNumber(row[19])
+
+        if (
+            finish === null ||
+            wins === null ||
+            losses === null ||
+            pointsFor === null ||
+            pointsAgainst === null ||
+            regularSeasonWins === null ||
+            regularSeasonLosses === null
+        ) {
+            console.warn(
+                `Skipping incomplete row for ${managerName} ${year}`
+            )
+            continue
+        }
+
+        parsed.push({
+            year,
+            finish,
+            powerRating: parseNumber(row[1]),
+            gamesPlayed: parseNumber(row[3]) ?? wins + losses + (parseNumber(row[6]) ?? 0),
+            wins,
+            losses,
+            ties: parseNumber(row[6]) ?? 0,
+            moves: parseNumber(row[8]) ?? 0,
+            pointsFor,
+            pointsAgainst,
+            pointsForGameHigh: parseNumber(row[11]),
+            pointsForGameLow: parseNumber(row[12]),
+            regularSeasonWins,
+            regularSeasonLosses,
+            regularSeasonTies: parseNumber(row[20]) ?? 0,
+            playoffAppearance: parseBool(row[22]),
+            playoffBye: parseBool(row[23]),
+            playoffWins: parseNumber(row[25]) ?? 0,
+            playoffLosses: parseNumber(row[26]) ?? 0,
+            championshipWon: parseBool(row[28]),
+        })
+    }
+
+    return parsed
+}
+
+function parseYearByYearStandings(
+    sheet: XLSX.WorkSheet
+): Map<string, string> {
+    const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+        header: 1,
+        defval: '',
+        raw: true,
+    })
+
+    const teamByYearFinish = new Map<string, string>()
+    let currentYear: number | null = null
+
+    for (const row of rows) {
+        if (!Array.isArray(row)) continue
+
+        const maybeYear = parseYear(row[1])
+        if (maybeYear && cellString(row, 2) === '') {
+            currentYear = maybeYear
+            continue
+        }
+
+        if (!currentYear) continue
+
+        const rankText = cellString(row, 1)
+        if (!rankText || rankText.toLowerCase() === 'rank') continue
+        if (rankText.toLowerCase() === 'average') {
+            currentYear = null
+            continue
+        }
+
+        const finish = parseFinish(rankText)
+        const teamName = cellString(row, 2)
+        if (finish === null || !teamName) continue
+
+        teamByYearFinish.set(`${currentYear}:${finish}`, teamName)
+    }
+
+    return teamByYearFinish
+}
+
+function parseChampionships(
+    sheet: XLSX.WorkSheet
+): Map<string, { teamName: string; managerName: string }> {
+    const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+        header: 1,
+        defval: '',
+        raw: true,
+    })
+
+    const champions = new Map<string, { teamName: string; managerName: string }>()
+
+    for (const row of rows) {
+        if (!Array.isArray(row)) continue
+        const year = parseYear(row[1])
+        const teamName = cellString(row, 4)
+        const managerName = cellString(row, 5)
+        if (!year || !teamName || !managerName) continue
+        champions.set(`${year}:${managerName.toLowerCase()}`, {
+            teamName,
+            managerName,
+        })
+    }
+
+    return champions
+}
+
+function resolveTeamName(
+    year: number,
+    finish: number,
+    managerName: string,
+    teamByYearFinish: Map<string, string>,
+    champions: Map<string, { teamName: string; managerName: string }>
+): string {
+    const champion = champions.get(`${year}:${managerName.toLowerCase()}`)
+    if (champion) return champion.teamName
+
+    const fromStandings = teamByYearFinish.get(`${year}:${finish}`)
+    if (fromStandings) return fromStandings
+
+    return `${managerName} (${year})`
+}
+
+async function main() {
+    const spreadsheetPath =
+        process.argv[2] ??
+        process.env.SPREADSHEET_PATH ??
+        '/Users/justinhobbs/Downloads/Beer League History.xlsx'
+
+    const workbook = XLSX.readFile(spreadsheetPath)
+    const teamByYearFinish = parseYearByYearStandings(
+        workbook.Sheets['Year by Year Standings']
+    )
+    const champions = parseChampionships(workbook.Sheets['Championship Seasons'])
+
+    const managerSheetNames = workbook.SheetNames.filter(
+        (name) => !SYSTEM_SHEETS.has(name)
+    )
+
+    console.log(`Importing ${managerSheetNames.length} manager sheets...`)
+
+    await db.delete(seasonEntries)
+    await db.delete(seasons)
+    await db.delete(managers)
+
+    const seasonIdByYear = new Map<number, number>()
+    const managerIdBySlug = new Map<string, number>()
+
+    for (const sheetName of managerSheetNames) {
+        const slug = slugify(sheetName)
+        const inserted = await db
+            .insert(managers)
+            .values({
+                name: sheetName,
+                slug,
+                createdAt: new Date().toISOString(),
+            })
+            .returning({ id: managers.id })
+
+        managerIdBySlug.set(slug, inserted[0].id)
+    }
+
+    let entryCount = 0
+
+    for (const sheetName of managerSheetNames) {
+        const parsedRows = parseManagerSheet(
+            workbook.Sheets[sheetName],
+            sheetName
+        )
+        const managerId = managerIdBySlug.get(slugify(sheetName))
+        if (!managerId) continue
+
+        for (const row of parsedRows) {
+            let seasonId = seasonIdByYear.get(row.year)
+            if (!seasonId) {
+                const insertedSeason = await db
+                    .insert(seasons)
+                    .values({ year: row.year })
+                    .returning({ id: seasons.id })
+                seasonId = insertedSeason[0].id
+                seasonIdByYear.set(row.year, seasonId)
+            }
+
+            const champion = champions.get(
+                `${row.year}:${sheetName.toLowerCase()}`
+            )
+            const championshipWon = champion ? true : row.championshipWon
+
+            const teamName = resolveTeamName(
+                row.year,
+                row.finish,
+                sheetName,
+                teamByYearFinish,
+                champions
+            )
+
+            await db.insert(seasonEntries).values({
+                seasonId,
+                managerId,
+                teamName,
+                finish: row.finish,
+                powerRating: row.powerRating,
+                gamesPlayed: row.gamesPlayed,
+                wins: row.wins,
+                losses: row.losses,
+                ties: row.ties,
+                moves: row.moves,
+                pointsFor: row.pointsFor,
+                pointsAgainst: row.pointsAgainst,
+                pointsForGameHigh: row.pointsForGameHigh,
+                pointsForGameLow: row.pointsForGameLow,
+                regularSeasonWins: row.regularSeasonWins,
+                regularSeasonLosses: row.regularSeasonLosses,
+                regularSeasonTies: row.regularSeasonTies,
+                playoffAppearance: row.playoffAppearance || championshipWon,
+                playoffBye: row.playoffBye,
+                playoffWins: row.playoffWins,
+                playoffLosses: row.playoffLosses,
+                championshipWon,
+            })
+
+            entryCount += 1
+        }
+    }
+
+    console.log(
+        `Import complete: ${managerSheetNames.length} managers, ${seasonIdByYear.size} seasons, ${entryCount} entries.`
+    )
+}
+
+main().catch((error) => {
+    console.error(error)
+    process.exit(1)
+})

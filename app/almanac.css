@@ -1,0 +1,229 @@
+.almanac-hero {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 3px double var(--almanac-gold);
+    margin-bottom: 2.5rem;
+}
+
+.almanac-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--almanac-muted);
+    margin-bottom: 0.75rem;
+}
+
+.almanac-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--almanac-ink);
+    margin-bottom: 0.75rem;
+}
+
+.almanac-subtitle {
+    font-size: 1.1rem;
+    color: var(--almanac-muted);
+    max-width: 42rem;
+    margin: 0 auto;
+}
+
+.almanac-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.almanac-card {
+    background: var(--almanac-card);
+    border: 1px solid var(--almanac-border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.almanac-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.almanac-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+    color: var(--almanac-ink);
+}
+
+.almanac-card p {
+    color: var(--almanac-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.almanac-stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.almanac-stat {
+    background: var(--almanac-card);
+    border: 1px solid var(--almanac-border);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    text-align: center;
+}
+
+.almanac-stat-value {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--almanac-gold-dark);
+}
+
+.almanac-stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--almanac-muted);
+    margin-top: 0.25rem;
+}
+
+.almanac-section-title {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--almanac-gold);
+    color: var(--almanac-ink);
+}
+
+.almanac-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--almanac-border);
+    border-radius: 0.5rem;
+    background: var(--almanac-card);
+}
+
+.almanac-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.almanac-table th,
+.almanac-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--almanac-border);
+}
+
+.almanac-table th {
+    background: var(--almanac-table-head);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--almanac-muted);
+    font-weight: 600;
+}
+
+.almanac-table tr:last-child td {
+    border-bottom: none;
+}
+
+.almanac-table tbody tr:hover {
+    background: var(--almanac-row-hover);
+}
+
+.almanac-table a {
+    color: var(--almanac-link);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.almanac-table a:hover {
+    text-decoration: underline;
+}
+
+.champion-row {
+    background: rgba(212, 168, 75, 0.12);
+}
+
+.champion-badge {
+    display: inline-block;
+    background: var(--almanac-gold);
+    color: #1a1207;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    margin-left: 0.35rem;
+}
+
+.manager-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px double var(--almanac-gold);
+}
+
+.manager-header h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    color: var(--almanac-ink);
+}
+
+.manager-meta {
+    color: var(--almanac-muted);
+    margin-top: 0.35rem;
+}
+
+.manager-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.highlight-pill {
+    background: var(--almanac-card);
+    border: 1px solid var(--almanac-border);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+}
+
+.highlight-pill strong {
+    color: var(--almanac-gold-dark);
+}
+
+.archive-note {
+    background: var(--almanac-card);
+    border: 1px dashed var(--almanac-border);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    color: var(--almanac-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.num {
+    font-variant-numeric: tabular-nums;
+}
+
+.rank-cell {
+    font-weight: 700;
+    color: var(--almanac-gold-dark);
+    width: 3rem;
+}

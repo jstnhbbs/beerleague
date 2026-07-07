@@ -7,11 +7,20 @@ export default function Navigation() {
         <nav className="navbar">
             <div className="nav-container">
                 <Link href="/" className="nav-logo">
-                    Beer League
+                    Beer League Almanac
                 </Link>
                 <div className="nav-links">
-                    <Link href="/" className="nav-link">
-                        Home
+                    <Link href="/managers" className="nav-link">
+                        Managers
+                    </Link>
+                    <Link href="/seasons" className="nav-link">
+                        Seasons
+                    </Link>
+                    <Link href="/championships" className="nav-link">
+                        Championships
+                    </Link>
+                    <Link href="/archive" className="nav-link">
+                        Archive
                     </Link>
                     <Link href="/rules" className="nav-link">
                         Rules

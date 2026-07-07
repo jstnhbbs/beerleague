@@ -1,45 +1,82 @@
 import Link from 'next/link'
-import './home.css'
+import { getLeagueSummary } from '@/lib/queries'
+import './almanac.css'
 
-const teams = [
-    { id: '1', name: 'The Gnats' },
-    { id: '2', name: 'A Team Has No Name' },
-    { id: '3', name: 'Complete Ass' },
-    { id: '4', name: 'Frodo Tea Baggins' },
-    { id: '5', name: 'M@' },
-    { id: '6', name: 'Uncle Rico Dynamite' },
-    { id: '7', name: 'Keepers Are Gay' },
-    { id: '8', name: 'ZiegenBrock' },
-    { id: '9', name: 'Golden Shower' },
-    { id: '10', name: 'DDT' },
-]
+export default async function Home() {
+    const summary = await getLeagueSummary()
 
-export default function Home() {
     return (
         <div className="container">
-            <div className="hero">
-                <h1 className="title">Beer League Stats</h1>
-                <p className="subtitle">View statistics and standings for all teams</p>
+            <header className="almanac-hero">
+                <p className="almanac-eyebrow">Est. 2007 · HuskieFantasy</p>
+                <h1 className="almanac-title">Beer League Almanac</h1>
+                <p className="almanac-subtitle">
+                    The complete interactive history of the league — managers,
+                    seasons, championships, and the stories behind every roster
+                    name.
+                </p>
+            </header>
+
+            <div className="almanac-stat-strip">
+                <div className="almanac-stat">
+                    <div className="almanac-stat-value">{summary.managerCount}</div>
+                    <div className="almanac-stat-label">Managers</div>
+                </div>
+                <div className="almanac-stat">
+                    <div className="almanac-stat-value">
+                        {summary.firstSeason && summary.latestSeason
+                            ? `${summary.firstSeason}–${summary.latestSeason}`
+                            : '—'}
+                    </div>
+                    <div className="almanac-stat-label">Seasons Tracked</div>
+                </div>
+                <div className="almanac-stat">
+                    <div className="almanac-stat-value">
+                        {summary.championshipCount}
+                    </div>
+                    <div className="almanac-stat-label">Championships</div>
+                </div>
+                {summary.topChampion && (
+                    <div className="almanac-stat">
+                        <div className="almanac-stat-value">
+                            {summary.topChampion.count}
+                        </div>
+                        <div className="almanac-stat-label">
+                            Titles · {summary.topChampion.name}
+                        </div>
+                    </div>
+                )}
             </div>
 
-            <div className="teams-grid">
-                {teams.map((team) => {
-                    // Add 'featured' class to teams you want to distinguish (change IDs as needed)
-                    const isWinner = team.id === '6' 
-                    const isLoser = team.id === '8'
-                    return (
-                        <Link
-                            key={team.id}
-                            href={`/teams/${team.id}`}
-                            className={`team-card ${isWinner ? 'team-card-winner' : isLoser ? 'team-card-loser' : ''}`}
-                        >
-                            <div className="team-card-content">
-                                <h2>{team.name}</h2>
-                                <p>View Stats →</p>
-                            </div>
-                        </Link>
-                    )
-                })}
+            <div className="almanac-grid">
+                <Link href="/managers" className="almanac-card">
+                    <h2>Manager Rankings</h2>
+                    <p>
+                        Career power ratings, records, and playoff history for
+                        every manager in league history.
+                    </p>
+                </Link>
+                <Link href="/seasons" className="almanac-card">
+                    <h2>Season Standings</h2>
+                    <p>
+                        Year-by-year final standings with records, points, and
+                        playoff appearances.
+                    </p>
+                </Link>
+                <Link href="/championships" className="almanac-card">
+                    <h2>Championships</h2>
+                    <p>
+                        Every title run from 2015 to present — the champions,
+                        teams, and season stats.
+                    </p>
+                </Link>
+                <Link href="/archive" className="almanac-card">
+                    <h2>Live Stats Archive</h2>
+                    <p>
+                        The previous Google Sheets team views, kept around while
+                        the new almanac grows.
+                    </p>
+                </Link>
             </div>
         </div>
     )

@@ -69,6 +69,7 @@ export default function TeamPage({ params }: TeamPageProps) {
     return (
         <div className="container">
             <div className="team-header">
+                <p className="almanac-eyebrow">Legacy Archive</p>
                 <h1 className="team-title">{teamName} Statistics</h1>
             </div>
 

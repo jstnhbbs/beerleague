@@ -6,8 +6,8 @@ import Navigation from '@/components/Navigation'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-    title: 'Beer League Stats',
-    description: 'Beer League Statistics and Team Information',
+    title: 'Beer League Almanac',
+    description: 'Interactive fantasy football league history for Beer League',
 }
 
 export default function RootLayout({
