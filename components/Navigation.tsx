@@ -19,9 +19,6 @@ export default function Navigation() {
                     <Link href="/championships" className="nav-link">
                         Championships
                     </Link>
-                    <Link href="/archive" className="nav-link">
-                        Archive
-                    </Link>
                     <Link href="/rules" className="nav-link">
                         Rules
                     </Link>

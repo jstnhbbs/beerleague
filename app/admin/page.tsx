@@ -30,6 +30,13 @@ export default async function AdminPage() {
                         <h2>Add Manager</h2>
                         <p>Register a new manager to the league history.</p>
                     </Link>
+                    <Link href="/admin/archive" className="almanac-card">
+                        <h2>Stats Archive</h2>
+                        <p>
+                            Legacy Google Sheets team views from the previous
+                            site.
+                        </p>
+                    </Link>
                     <form action="/api/admin/logout" method="post">
                         <button type="submit" className="almanac-card">
                             <h2>Log Out</h2>

@@ -72,13 +72,6 @@ export default async function Home() {
                         teams, and season stats.
                     </p>
                 </Link>
-                <Link href="/archive" className="almanac-card">
-                    <h2>Live Stats Archive</h2>
-                    <p>
-                        The previous Google Sheets team views, kept around while
-                        the new almanac grows.
-                    </p>
-                </Link>
             </div>
         </div>
     )

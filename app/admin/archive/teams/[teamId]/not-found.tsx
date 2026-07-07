@@ -4,12 +4,20 @@ export default function NotFound() {
     return (
         <div className="container">
             <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Team Not Found</h1>
-                <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-                    The team you're looking for doesn't exist.
+                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>
+                    Team Not Found
+                </h1>
+                <p
+                    style={{
+                        fontSize: '1.25rem',
+                        color: 'var(--text-secondary)',
+                        marginBottom: '2rem',
+                    }}
+                >
+                    The team you&apos;re looking for doesn&apos;t exist.
                 </p>
                 <Link
-                    href="/"
+                    href="/admin/archive"
                     style={{
                         display: 'inline-block',
                         padding: '0.75rem 2rem',
@@ -18,10 +26,9 @@ export default function NotFound() {
                         textDecoration: 'none',
                         borderRadius: '8px',
                         fontWeight: '500',
-                        transition: 'background 0.2s'
                     }}
                 >
-                    Go Back Home
+                    Back to Archive
                 </Link>
             </div>
         </div>
