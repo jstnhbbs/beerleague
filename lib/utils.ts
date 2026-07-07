@@ -6,6 +6,10 @@ export function slugify(name: string): string {
         .replace(/^-|-$/g, '')
 }
 
+export function isValidSlug(slug: string): boolean {
+    return slug.length > 0
+}
+
 export function winPct(wins: number, losses: number, ties = 0): number {
     const games = wins + losses + ties
     if (games === 0) return 0

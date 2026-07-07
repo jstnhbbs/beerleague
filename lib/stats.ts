@@ -147,7 +147,8 @@ export function rankManagers(
             b.stats.totalLosses,
             b.stats.totalTies
         )
-        return bWinPct - aWinPct
+        if (bWinPct !== aWinPct) return bWinPct - aWinPct
+        return a.name.localeCompare(b.name)
     })
 }
 

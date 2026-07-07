@@ -2,9 +2,21 @@ import { createHmac, timingSafeEqual } from 'crypto'
 import { cookies } from 'next/headers'
 
 const COOKIE_NAME = 'beerleague_admin_session'
+const DEV_SESSION_SECRET = 'dev-only-change-me'
 
 function getSessionSecret(): string {
-    return process.env.ADMIN_SESSION_SECRET ?? 'dev-only-change-me'
+    const secret = process.env.ADMIN_SESSION_SECRET
+
+    if (process.env.NODE_ENV === 'production') {
+        if (!secret || secret === DEV_SESSION_SECRET) {
+            throw new Error(
+                'ADMIN_SESSION_SECRET must be set to a strong value in production'
+            )
+        }
+        return secret
+    }
+
+    return secret ?? DEV_SESSION_SECRET
 }
 
 function signSession(): string {
@@ -40,17 +52,22 @@ export async function clearAdminSession(): Promise<void> {
 }
 
 export async function isAdmin(): Promise<boolean> {
-    const cookieStore = await cookies()
-    const session = cookieStore.get(COOKIE_NAME)?.value
-    if (!session) return false
+    try {
+        const cookieStore = await cookies()
+        const session = cookieStore.get(COOKIE_NAME)?.value
+        if (!session) return false
 
-    const expected = signSession()
-    const a = Buffer.from(session)
-    const b = Buffer.from(expected)
-    if (a.length !== b.length) return false
-    return timingSafeEqual(a, b)
+        const expected = signSession()
+        const a = Buffer.from(session)
+        const b = Buffer.from(expected)
+        if (a.length !== b.length) return false
+        return timingSafeEqual(a, b)
+    } catch {
+        return false
+    }
 }
 
+/** Returns true when the request has a valid admin session. */
 export async function requireAdmin(): Promise<boolean> {
     return isAdmin()
 }

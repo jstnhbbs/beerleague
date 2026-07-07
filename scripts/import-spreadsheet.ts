@@ -1,7 +1,14 @@
 import * as XLSX from 'xlsx'
 import { db } from '../lib/db'
 import { managers, seasonEntries, seasons } from '../lib/db/schema'
-import { parseBool, parseNumber, slugify } from '../lib/utils'
+import { normalizeSeasonFlags } from '../lib/season-entry'
+import { isValidSlug, parseBool, parseNumber, slugify } from '../lib/utils'
+
+const REQUIRED_SHEETS = [
+    'Year by Year Standings',
+    'Championship Seasons',
+    'Overall Manager Rankings',
+] as const
 
 const SYSTEM_SHEETS = new Set([
     'Overall Manager Rankings',
@@ -56,6 +63,25 @@ interface YearStandingRow {
     year: number
     finish: number
     teamName: string
+}
+
+function validateWorkbook(workbook: XLSX.WorkBook): void {
+    const missing = REQUIRED_SHEETS.filter((name) => !workbook.Sheets[name])
+    if (missing.length > 0) {
+        throw new Error(
+            `Spreadsheet is missing required sheets: ${missing.join(', ')}`
+        )
+    }
+}
+
+function resolveSpreadsheetPath(): string {
+    const spreadsheetPath = process.argv[2] ?? process.env.SPREADSHEET_PATH
+    if (!spreadsheetPath) {
+        throw new Error(
+            'Spreadsheet path required. Set SPREADSHEET_PATH or pass a file path argument.'
+        )
+    }
+    return spreadsheetPath
 }
 
 function cellValue(row: unknown[], index: number): unknown {
@@ -291,12 +317,10 @@ function resolveTeamName(
 }
 
 async function main() {
-    const spreadsheetPath =
-        process.argv[2] ??
-        process.env.SPREADSHEET_PATH ??
-        '/Users/justinhobbs/Downloads/Beer League History.xlsx'
-
+    const spreadsheetPath = resolveSpreadsheetPath()
     const workbook = XLSX.readFile(spreadsheetPath)
+    validateWorkbook(workbook)
+
     const standings = parseYearByYearStandings(
         workbook.Sheets['Year by Year Standings']
     )
@@ -311,96 +335,119 @@ async function main() {
 
     console.log(`Importing ${managerSheetNames.length} manager sheets...`)
 
-    await db.delete(seasonEntries)
-    await db.delete(seasons)
-    await db.delete(managers)
-
-    const seasonIdByYear = new Map<number, number>()
-    const managerIdBySlug = new Map<string, number>()
-
-    for (const sheetName of managerSheetNames) {
+    const managerRows = managerSheetNames.flatMap((sheetName) => {
         const slug = slugify(sheetName)
-        const inserted = await db
-            .insert(managers)
-            .values({
-                name: sheetName,
-                slug,
-                currentTeamName:
-                    currentTeamByManager.get(sheetName.toLowerCase()) ?? null,
-                createdAt: new Date().toISOString(),
-            })
-            .returning({ id: managers.id })
+        if (!isValidSlug(slug)) {
+            console.warn(`Skipping manager sheet with invalid slug: ${sheetName}`)
+            return []
+        }
 
-        managerIdBySlug.set(slug, inserted[0].id)
-    }
-
-    let entryCount = 0
-
-    for (const sheetName of managerSheetNames) {
         const parsedRows = parseManagerSheet(
             workbook.Sheets[sheetName],
             sheetName
         )
-        const managerId = managerIdBySlug.get(slugify(sheetName))
-        if (!managerId) continue
 
-        for (const row of parsedRows) {
-            let seasonId = seasonIdByYear.get(row.year)
-            if (!seasonId) {
-                const insertedSeason = await db
-                    .insert(seasons)
-                    .values({ year: row.year })
-                    .returning({ id: seasons.id })
-                seasonId = insertedSeason[0].id
-                seasonIdByYear.set(row.year, seasonId)
-            }
-
-            const champion = champions.get(
-                `${row.year}:${sheetName.toLowerCase()}`
-            )
-            const championshipWon = champion ? true : row.championshipWon
-
-            const teamName = resolveTeamName(
-                row.year,
-                row.finish,
-                row.powerRating,
+        return [
+            {
                 sheetName,
-                standings,
-                champions
-            )
+                slug,
+                currentTeamName:
+                    currentTeamByManager.get(sheetName.toLowerCase()) ?? null,
+                parsedRows,
+            },
+        ]
+    })
 
-            await db.insert(seasonEntries).values({
-                seasonId,
-                managerId,
-                teamName,
-                finish: row.finish,
-                powerRating: row.powerRating,
-                gamesPlayed: row.gamesPlayed,
-                wins: row.wins,
-                losses: row.losses,
-                ties: row.ties,
-                moves: row.moves,
-                pointsFor: row.pointsFor,
-                pointsAgainst: row.pointsAgainst,
-                pointsForGameHigh: row.pointsForGameHigh,
-                pointsForGameLow: row.pointsForGameLow,
-                regularSeasonWins: row.regularSeasonWins,
-                regularSeasonLosses: row.regularSeasonLosses,
-                regularSeasonTies: row.regularSeasonTies,
-                playoffAppearance: row.playoffAppearance || championshipWon,
-                playoffBye: row.playoffBye,
-                playoffWins: row.playoffWins,
-                playoffLosses: row.playoffLosses,
-                championshipWon,
-            })
+    let entryCount = 0
 
-            entryCount += 1
+    await db.transaction(async (tx) => {
+        await tx.delete(seasonEntries)
+        await tx.delete(seasons)
+        await tx.delete(managers)
+
+        const seasonIdByYear = new Map<number, number>()
+        const managerIdBySlug = new Map<string, number>()
+
+        for (const manager of managerRows) {
+            const inserted = await tx
+                .insert(managers)
+                .values({
+                    name: manager.sheetName,
+                    slug: manager.slug,
+                    currentTeamName: manager.currentTeamName,
+                    createdAt: new Date().toISOString(),
+                })
+                .returning({ id: managers.id })
+
+            managerIdBySlug.set(manager.slug, inserted[0].id)
         }
-    }
 
-    console.log(
-        `Import complete: ${managerSheetNames.length} managers, ${seasonIdByYear.size} seasons, ${entryCount} entries.`
-    )
+        for (const manager of managerRows) {
+            const managerId = managerIdBySlug.get(manager.slug)
+            if (!managerId) continue
+
+            for (const row of manager.parsedRows) {
+                let seasonId = seasonIdByYear.get(row.year)
+                if (!seasonId) {
+                    const insertedSeason = await tx
+                        .insert(seasons)
+                        .values({ year: row.year })
+                        .returning({ id: seasons.id })
+                    seasonId = insertedSeason[0].id
+                    seasonIdByYear.set(row.year, seasonId)
+                }
+
+                const champion = champions.get(
+                    `${row.year}:${manager.sheetName.toLowerCase()}`
+                )
+                const championshipWon = champion ? true : row.championshipWon
+                const { playoffAppearance } = normalizeSeasonFlags({
+                    playoffAppearance: row.playoffAppearance,
+                    championshipWon,
+                })
+
+                const teamName = resolveTeamName(
+                    row.year,
+                    row.finish,
+                    row.powerRating,
+                    manager.sheetName,
+                    standings,
+                    champions
+                )
+
+                await tx.insert(seasonEntries).values({
+                    seasonId,
+                    managerId,
+                    teamName,
+                    finish: row.finish,
+                    powerRating: row.powerRating,
+                    gamesPlayed: row.gamesPlayed,
+                    wins: row.wins,
+                    losses: row.losses,
+                    ties: row.ties,
+                    moves: row.moves,
+                    pointsFor: row.pointsFor,
+                    pointsAgainst: row.pointsAgainst,
+                    pointsForGameHigh: row.pointsForGameHigh,
+                    pointsForGameLow: row.pointsForGameLow,
+                    regularSeasonWins: row.regularSeasonWins,
+                    regularSeasonLosses: row.regularSeasonLosses,
+                    regularSeasonTies: row.regularSeasonTies,
+                    playoffAppearance,
+                    playoffBye: row.playoffBye,
+                    playoffWins: row.playoffWins,
+                    playoffLosses: row.playoffLosses,
+                    championshipWon,
+                })
+
+                entryCount += 1
+            }
+        }
+
+        console.log(
+            `Import complete: ${managerRows.length} managers, ${seasonIdByYear.size} seasons, ${entryCount} entries.`
+        )
+    })
 }
 
 main().catch((error) => {

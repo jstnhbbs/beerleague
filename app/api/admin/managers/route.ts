@@ -1,22 +1,32 @@
 import { eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
+import { parseJsonBody } from '@/lib/api'
 import { requireAdmin } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { managers } from '@/lib/db/schema'
-import { slugify } from '@/lib/utils'
+import { isValidSlug, slugify } from '@/lib/utils'
 
 export async function POST(request: Request) {
     if (!(await requireAdmin())) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const name = String(body.name ?? '').trim()
+    const parsed = await parseJsonBody<{ name?: string }>(request)
+    if ('error' in parsed) return parsed.error
+
+    const name = String(parsed.data.name ?? '').trim()
     if (!name) {
         return NextResponse.json({ error: 'Name is required' }, { status: 400 })
     }
 
     const slug = slugify(name)
+    if (!isValidSlug(slug)) {
+        return NextResponse.json(
+            { error: 'Name must contain at least one letter or number' },
+            { status: 400 }
+        )
+    }
+
     const existing = await db
         .select()
         .from(managers)
