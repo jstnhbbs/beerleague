@@ -4,18 +4,23 @@
 }
 
 .rules-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     text-align: center;
-    color: var(--primary-color);
+    color: var(--foreground);
+    letter-spacing: -0.02em;
 }
 
 .rules-content {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 2.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme='dark'] .rules-content {
+    box-shadow: var(--shadow-card-dark);
 }
 
 .rule-section {
@@ -29,32 +34,32 @@
 .rule-section h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--primary-color);
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border-light);
     padding-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .rule-section h2 {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .rule-section p {
     line-height: 1.6;
-    color: var(--text-secondary);
+    color: var(--foreground-muted);
     margin-bottom: 1rem;
 }
 
 .rule-section ul {
-    list-style-position: inside;
-    line-height: 1.8;
-    color: var(--text-secondary);
+    margin-left: 1.5rem;
+    color: var(--foreground-muted);
+    line-height: 1.6;
 }
 
-.rule-section ul li {
+.rule-section li {
     margin-bottom: 0.5rem;
 }
 
 @media (max-width: 768px) {
-    .rules-content {
-        padding: 1.5rem;
-    }
-
     .rules-title {
         font-size: 2rem;
     }

@@ -6,15 +6,20 @@
 .team-title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--foreground);
+    letter-spacing: -0.02em;
 }
 
 .sheet-container {
     background: var(--card-bg);
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
+}
+
+[data-theme='dark'] .sheet-container {
+    box-shadow: var(--shadow-card-dark);
 }
 
 .stats-sheet {

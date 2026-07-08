@@ -45,7 +45,9 @@ export default async function AdminArchiveTeamPage({ params }: TeamPageProps) {
             </div>
 
             <p style={{ marginTop: '1.5rem' }}>
-                <Link href="/admin/archive">← Back to stats archive</Link>
+                <Link href="/admin/archive" className="text-link">
+                    ← Back to stats archive
+                </Link>
             </p>
         </div>
     )

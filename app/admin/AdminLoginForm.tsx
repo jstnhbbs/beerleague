@@ -32,45 +32,23 @@ export default function AdminLoginForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="almanac-card" style={{ maxWidth: 420 }}>
+        <form onSubmit={handleSubmit} className="admin-form">
             <h2>Admin Login</h2>
-            <p style={{ margin: '0.75rem 0 1rem', color: 'var(--almanac-muted)' }}>
+            <p style={{ margin: '0.75rem 0 1rem', color: 'var(--foreground-muted)' }}>
                 Enter the league admin password to make edits.
             </p>
-            <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem' }}>
+            <label htmlFor="password" className="admin-field">
                 Password
+                <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="admin-input"
+                />
             </label>
-            <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                style={{
-                    width: '100%',
-                    padding: '0.65rem 0.75rem',
-                    marginBottom: '1rem',
-                    borderRadius: '0.375rem',
-                    border: '1px solid var(--almanac-border)',
-                    background: 'var(--almanac-card)',
-                    color: 'var(--almanac-ink)',
-                }}
-            />
-            {error && (
-                <p style={{ color: '#b45309', marginBottom: '0.75rem' }}>{error}</p>
-            )}
-            <button
-                type="submit"
-                disabled={loading}
-                style={{
-                    background: 'var(--almanac-gold)',
-                    color: '#1a1207',
-                    border: 'none',
-                    borderRadius: '0.375rem',
-                    padding: '0.65rem 1rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                }}
-            >
+            {error && <p className="admin-error">{error}</p>}
+            <button type="submit" disabled={loading} className="admin-button">
                 {loading ? 'Signing in…' : 'Sign In'}
             </button>
         </form>

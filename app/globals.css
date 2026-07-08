@@ -4,6 +4,13 @@
     margin: 0;
 }
 
+html {
+    font-size: 87.5%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
 html,
 body {
     max-width: 100vw;
@@ -11,89 +18,64 @@ body {
 }
 
 body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    width: 100%;
+    min-width: 320px;
+    min-height: 100vh;
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    background: #ffffff;
+    color: var(--foreground);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+[data-theme='dark'] body {
+    background: #0a0a0a;
+    color: var(--foreground);
+}
+
+:focus {
+    outline: 0;
+}
+
+:focus-visible {
+    outline: auto Highlight;
+    outline: auto -webkit-focus-ring-color;
 }
 
 :root {
-    --foreground-rgb: 26, 18, 7;
-    --background-start-rgb: 247, 241, 229;
-    --background-end-rgb: 240, 232, 216;
-    --primary-color: #8b5a2b;
-    --primary-hover: #6f4520;
-    --card-bg: #fffdf8;
-    --text-secondary: #6b5c48;
-    --font-serif: Georgia, 'Times New Roman', serif;
-    --almanac-ink: #1a1207;
-    --almanac-muted: #6b5c48;
-    --almanac-card: #fffdf8;
-    --almanac-border: #d9cbb2;
-    --almanac-gold: #d4a84b;
-    --almanac-gold-dark: #9a6b1a;
-    --almanac-link: #8b5a2b;
-    --almanac-table-head: #f3ead8;
-    --almanac-row-hover: rgba(212, 168, 75, 0.08);
+    --background: #ffffff;
+    --foreground: #171717;
+    --foreground-muted: #525252;
+    --accent: #bc9645;
+    --accent-hover: #a6823b;
+    --border: #a3a3a3;
+    --border-light: #e5e5e5;
+    --card-bg: #ffffff;
+    --card-bg-dark: #171717;
+    --header-bg: #0a0a0a;
+    --header-fg: #fafafa;
+    --input-bg-dark: #262626;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-accent: 0 4px 14px rgba(188, 150, 69, 0.25);
+    --shadow-accent-dark: 0 4px 14px rgba(188, 150, 69, 0.35);
+    --shadow-card-dark: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+    /* Legacy aliases used across the app */
+    --primary-color: var(--accent);
+    --primary-hover: var(--accent-hover);
+    --text-secondary: var(--foreground-muted);
 }
 
-:root.dark {
-    --foreground-rgb: 245, 237, 220;
-    --background-start-rgb: 22, 18, 14;
-    --background-end-rgb: 30, 24, 18;
-    --primary-color: #d4a84b;
-    --primary-hover: #e8be62;
-    --card-bg: #2a2219;
-    --text-secondary: #b9a88e;
-    --almanac-ink: #f5eddc;
-    --almanac-muted: #b9a88e;
-    --almanac-card: #2a2219;
-    --almanac-border: #4a3d2e;
-    --almanac-gold: #d4a84b;
-    --almanac-gold-dark: #e8be62;
-    --almanac-link: #e8be62;
-    --almanac-table-head: #342a1f;
-    --almanac-row-hover: rgba(212, 168, 75, 0.12);
+[data-theme='dark'] {
+    --foreground: #fafafa;
+    --foreground-muted: #a3a3a3;
+    --accent-hover: #c9a952;
+    --card-bg: #171717;
 }
 
-:root.light {
-    --foreground-rgb: 26, 18, 7;
-    --background-start-rgb: 247, 241, 229;
-    --background-end-rgb: 240, 232, 216;
-    --primary-color: #8b5a2b;
-    --primary-hover: #6f4520;
-    --card-bg: #fffdf8;
-    --text-secondary: #6b5c48;
-    --almanac-ink: #1a1207;
-    --almanac-muted: #6b5c48;
-    --almanac-card: #fffdf8;
-    --almanac-border: #d9cbb2;
-    --almanac-gold: #d4a84b;
-    --almanac-gold-dark: #9a6b1a;
-    --almanac-link: #8b5a2b;
-    --almanac-table-head: #f3ead8;
-    --almanac-row-hover: rgba(212, 168, 75, 0.08);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not(.light):not(.dark) {
-        --foreground-rgb: 245, 237, 220;
-        --background-start-rgb: 22, 18, 14;
-        --background-end-rgb: 30, 24, 18;
-        --primary-color: #d4a84b;
-        --primary-hover: #e8be62;
-        --card-bg: #2a2219;
-        --text-secondary: #b9a88e;
-        --almanac-ink: #f5eddc;
-        --almanac-muted: #b9a88e;
-        --almanac-card: #2a2219;
-        --almanac-border: #4a3d2e;
-        --almanac-gold: #d4a84b;
-        --almanac-gold-dark: #e8be62;
-        --almanac-link: #e8be62;
-        --almanac-table-head: #342a1f;
-        --almanac-row-hover: rgba(212, 168, 75, 0.12);
-    }
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 main {
@@ -104,4 +86,69 @@ main {
 .container {
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.page-title {
+    color: var(--foreground) !important;
+    text-shadow: none !important;
+    transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .page-title {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.section-heading {
+    color: var(--foreground) !important;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme='dark'] .section-heading {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+header a,
+header button,
+header nav a,
+header nav button {
+    color: var(--header-fg) !important;
+}
+
+header a:hover,
+header button:hover,
+header nav a:hover,
+header nav button:hover {
+    color: var(--accent) !important;
+}
+
+header nav a.active,
+header a.active {
+    background: color-mix(in srgb, var(--accent) 25%, transparent) !important;
+    color: var(--accent) !important;
+}
+
+[data-theme='dark'] header nav a.active,
+[data-theme='dark'] header a.active {
+    background: color-mix(in srgb, var(--accent) 20%, transparent) !important;
+    color: var(--accent) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    color: var(--foreground) !important;
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 1rem;
+    }
 }

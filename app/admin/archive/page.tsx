@@ -38,7 +38,9 @@ export default async function AdminArchivePage() {
             </div>
 
             <p style={{ marginTop: '1.5rem' }}>
-                <Link href="/admin">← Back to admin dashboard</Link>
+                <Link href="/admin" className="text-link">
+                    ← Back to admin dashboard
+                </Link>
             </p>
         </div>
     )

@@ -1,30 +1,51 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import './Navigation.css'
-import DarkModeToggle from './DarkModeToggle'
+import ThemeToggle from './ThemeToggle'
+
+const navItems = [
+    { href: '/managers', label: 'Managers' },
+    { href: '/seasons', label: 'Seasons' },
+    { href: '/championships', label: 'Championships' },
+    { href: '/rules', label: 'Rules' },
+]
+
+function isActive(pathname: string, href: string): boolean {
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(`${href}/`)
+}
 
 export default function Navigation() {
+    const pathname = usePathname()
+
     return (
-        <nav className="navbar">
-            <div className="nav-container">
-                <Link href="/" className="nav-logo">
-                    Beer League Almanac
-                </Link>
-                <div className="nav-links">
-                    <Link href="/managers" className="nav-link">
-                        Managers
+        <header>
+            <nav className="navbar">
+                <div className="nav-container">
+                    <Link
+                        href="/"
+                        className={`nav-logo ${pathname === '/' ? 'active' : ''}`}
+                    >
+                        Beer League Almanac
                     </Link>
-                    <Link href="/seasons" className="nav-link">
-                        Seasons
-                    </Link>
-                    <Link href="/championships" className="nav-link">
-                        Championships
-                    </Link>
-                    <Link href="/rules" className="nav-link">
-                        Rules
-                    </Link>
-                    <DarkModeToggle />
+                    <div className="nav-links">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`nav-link ${
+                                    isActive(pathname, item.href) ? 'active' : ''
+                                }`}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+                        <ThemeToggle />
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </header>
     )
 }

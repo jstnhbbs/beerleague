@@ -1,9 +1,17 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
+import { ThemeProvider } from '@/components/ThemeProvider'
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto({
+    weight: ['300', '400', '500', '700'],
+    style: ['normal', 'italic'],
+    subsets: ['latin'],
+    display: 'swap',
+    preload: false,
+    adjustFontFallback: true,
+})
 
 export const metadata: Metadata = {
     title: 'Beer League Almanac',
@@ -17,29 +25,29 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={inter.className}>
+            <body className={roboto.className} suppressHydrationWarning>
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `
                             (function() {
                                 try {
-                                    const stored = localStorage.getItem('theme');
-                                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                                    const shouldBeDark = stored === 'dark' || (!stored && prefersDark);
-                                    if (shouldBeDark) {
-                                        document.documentElement.classList.add('dark');
-                                        document.documentElement.classList.remove('light');
+                                    var stored = localStorage.getItem('theme');
+                                    if (stored === 'light' || stored === 'dark') {
+                                        document.documentElement.setAttribute('data-theme', stored);
+                                    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                                        document.documentElement.setAttribute('data-theme', 'dark');
                                     } else {
-                                        document.documentElement.classList.add('light');
-                                        document.documentElement.classList.remove('dark');
+                                        document.documentElement.setAttribute('data-theme', 'light');
                                     }
                                 } catch (e) {}
                             })();
                         `,
                     }}
                 />
-                <Navigation />
-                <main>{children}</main>
+                <ThemeProvider>
+                    <Navigation />
+                    <main>{children}</main>
+                </ThemeProvider>
             </body>
         </html>
     )

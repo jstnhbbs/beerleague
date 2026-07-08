@@ -39,31 +39,21 @@ export default function SeasonEntryForm({ managers }: SeasonEntryFormProps) {
             return
         }
 
-        const data = await response.json()
         router.push(`/seasons/${payload.year}`)
         router.refresh()
         setLoading(false)
     }
 
-    const fieldStyle = {
-        width: '100%',
-        padding: '0.65rem 0.75rem',
-        borderRadius: '0.375rem',
-        border: '1px solid var(--almanac-border)',
-        background: 'var(--almanac-card)',
-        color: 'var(--almanac-ink)',
-    }
-
     return (
-        <form onSubmit={handleSubmit} className="almanac-card" style={{ maxWidth: 720 }}>
-            <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
-                <label>
+        <form onSubmit={handleSubmit} className="admin-form">
+            <div className="admin-form-grid">
+                <label className="admin-field">
                     Year
-                    <input name="year" type="number" required style={fieldStyle} />
+                    <input name="year" type="number" required className="admin-input" />
                 </label>
-                <label>
+                <label className="admin-field">
                     Manager
-                    <select name="managerId" required style={fieldStyle}>
+                    <select name="managerId" required className="admin-select">
                         <option value="">Select manager</option>
                         {managers.map((manager) => (
                             <option key={manager.id} value={manager.id}>
@@ -72,74 +62,129 @@ export default function SeasonEntryForm({ managers }: SeasonEntryFormProps) {
                         ))}
                     </select>
                 </label>
-                <label>
+                <label className="admin-field">
                     Team Name
-                    <input name="teamName" type="text" required style={fieldStyle} />
+                    <input name="teamName" type="text" required className="admin-input" />
                 </label>
-                <label>
+                <label className="admin-field">
                     Finish
-                    <input name="finish" type="number" min="1" required style={fieldStyle} />
+                    <input
+                        name="finish"
+                        type="number"
+                        min="1"
+                        required
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Power Rating
-                    <input name="powerRating" type="number" step="0.01" style={fieldStyle} />
+                    <input
+                        name="powerRating"
+                        type="number"
+                        step="0.01"
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Moves
-                    <input name="moves" type="number" defaultValue="0" style={fieldStyle} />
+                    <input
+                        name="moves"
+                        type="number"
+                        defaultValue="0"
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Regular Season Wins
-                    <input name="regularSeasonWins" type="number" defaultValue="0" style={fieldStyle} />
+                    <input
+                        name="regularSeasonWins"
+                        type="number"
+                        defaultValue="0"
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Regular Season Losses
-                    <input name="regularSeasonLosses" type="number" defaultValue="0" style={fieldStyle} />
+                    <input
+                        name="regularSeasonLosses"
+                        type="number"
+                        defaultValue="0"
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Regular Season Ties
-                    <input name="regularSeasonTies" type="number" defaultValue="0" style={fieldStyle} />
+                    <input
+                        name="regularSeasonTies"
+                        type="number"
+                        defaultValue="0"
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Points For
-                    <input name="pointsFor" type="number" step="0.01" required style={fieldStyle} />
+                    <input
+                        name="pointsFor"
+                        type="number"
+                        step="0.01"
+                        required
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Points Against
-                    <input name="pointsAgainst" type="number" step="0.01" required style={fieldStyle} />
+                    <input
+                        name="pointsAgainst"
+                        type="number"
+                        step="0.01"
+                        required
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Playoff Wins
-                    <input name="playoffWins" type="number" defaultValue="0" style={fieldStyle} />
+                    <input
+                        name="playoffWins"
+                        type="number"
+                        defaultValue="0"
+                        className="admin-input"
+                    />
                 </label>
-                <label>
+                <label className="admin-field">
                     Playoff Losses
-                    <input name="playoffLosses" type="number" defaultValue="0" style={fieldStyle} />
+                    <input
+                        name="playoffLosses"
+                        type="number"
+                        defaultValue="0"
+                        className="admin-input"
+                    />
                 </label>
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-                <label><input name="playoffAppearance" type="checkbox" /> Playoff appearance</label>
-                <label><input name="playoffBye" type="checkbox" /> First-round bye</label>
-                <label><input name="championshipWon" type="checkbox" /> Championship won</label>
-            </div>
-
-            {error && <p style={{ color: '#b45309', marginTop: '1rem' }}>{error}</p>}
-
-            <button
-                type="submit"
-                disabled={loading}
+            <div
                 style={{
-                    marginTop: '1.25rem',
-                    background: 'var(--almanac-gold)',
-                    color: '#1a1207',
-                    border: 'none',
-                    borderRadius: '0.375rem',
-                    padding: '0.65rem 1rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
+                    display: 'flex',
+                    gap: '1rem',
+                    marginTop: '1rem',
+                    flexWrap: 'wrap',
                 }}
             >
+                <label>
+                    <input name="playoffAppearance" type="checkbox" /> Playoff
+                    appearance
+                </label>
+                <label>
+                    <input name="playoffBye" type="checkbox" /> First-round bye
+                </label>
+                <label>
+                    <input name="championshipWon" type="checkbox" /> Championship
+                    won
+                </label>
+            </div>
+
+            {error && <p className="admin-error">{error}</p>}
+
+            <button type="submit" disabled={loading} className="admin-button">
                 {loading ? 'Saving…' : 'Save Season Entry'}
             </button>
         </form>

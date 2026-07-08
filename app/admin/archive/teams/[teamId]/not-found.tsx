@@ -16,18 +16,7 @@ export default function NotFound() {
                 >
                     The team you&apos;re looking for doesn&apos;t exist.
                 </p>
-                <Link
-                    href="/admin/archive"
-                    style={{
-                        display: 'inline-block',
-                        padding: '0.75rem 2rem',
-                        background: 'var(--primary-color)',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '8px',
-                        fontWeight: '500',
-                    }}
-                >
+                <Link href="/admin/archive" className="text-link">
                     Back to Archive
                 </Link>
             </div>

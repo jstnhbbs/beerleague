@@ -35,38 +35,19 @@ export default function ManagerForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="almanac-card" style={{ maxWidth: 420 }}>
-            <label htmlFor="name">Manager Name</label>
-            <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                style={{
-                    width: '100%',
-                    padding: '0.65rem 0.75rem',
-                    marginTop: '0.5rem',
-                    marginBottom: '1rem',
-                    borderRadius: '0.375rem',
-                    border: '1px solid var(--almanac-border)',
-                    background: 'var(--almanac-card)',
-                    color: 'var(--almanac-ink)',
-                }}
-            />
-            {error && <p style={{ color: '#b45309', marginBottom: '0.75rem' }}>{error}</p>}
-            <button
-                type="submit"
-                disabled={loading}
-                style={{
-                    background: 'var(--almanac-gold)',
-                    color: '#1a1207',
-                    border: 'none',
-                    borderRadius: '0.375rem',
-                    padding: '0.65rem 1rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                }}
-            >
+        <form onSubmit={handleSubmit} className="admin-form">
+            <label htmlFor="name" className="admin-field">
+                Manager Name
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className="admin-input"
+                />
+            </label>
+            {error && <p className="admin-error">{error}</p>}
+            <button type="submit" disabled={loading} className="admin-button">
                 {loading ? 'Saving…' : 'Create Manager'}
             </button>
         </form>
