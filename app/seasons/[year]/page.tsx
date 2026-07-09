@@ -52,11 +52,14 @@ export default async function SeasonPage({ params }: SeasonPageProps) {
                                     row.championshipWon ? 'champion-row' : ''
                                 }
                             >
-                                <td className="rank-cell num">
+                                <td className="rank-cell num" data-label="Finish">
                                     {row.playoffAppearance ? '*' : ''}
                                     {row.finish}
                                 </td>
-                                <td>
+                                <td
+                                    className="almanac-row-title"
+                                    data-label="Team"
+                                >
                                     {row.teamName}
                                     {row.championshipWon && (
                                         <span className="champion-badge">
@@ -64,32 +67,32 @@ export default async function SeasonPage({ params }: SeasonPageProps) {
                                         </span>
                                     )}
                                 </td>
-                                <td>
+                                <td data-label="Manager">
                                     <Link
                                         href={`/managers/${row.managerSlug}`}
                                     >
                                         {row.managerName}
                                     </Link>
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Record">
                                     {formatRecord(
                                         row.regularSeasonWins,
                                         row.regularSeasonLosses,
                                         row.regularSeasonTies
                                     )}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Pts For">
                                     {row.pointsFor.toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Pts Against">
                                     {row.pointsAgainst.toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Margin">
                                     {(
                                         row.pointsFor - row.pointsAgainst
                                     ).toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="PR">
                                     {row.powerRating?.toFixed(1) ?? '—'}
                                 </td>
                             </tr>

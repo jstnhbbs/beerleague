@@ -35,30 +35,37 @@ export default async function ChampionshipsPage() {
                     <tbody>
                         {championships.map((row) => (
                             <tr key={row.year} className="champion-row">
-                                <td>
+                                <td
+                                    className="almanac-row-title"
+                                    data-label="Year"
+                                >
                                     <Link href={`/seasons/${row.year}`}>
                                         {row.year}
                                     </Link>
                                 </td>
-                                <td>{row.teamName}</td>
-                                <td>
+                                <td data-label="Champion">{row.teamName}</td>
+                                <td data-label="Manager">
                                     <Link
                                         href={`/managers/${row.managerSlug}`}
                                     >
                                         {row.managerName}
                                     </Link>
                                 </td>
-                                <td className="num">{row.record}</td>
-                                <td className="num">
+                                <td className="num" data-label="Reg. Season">
+                                    {row.record}
+                                </td>
+                                <td className="num" data-label="Pts For">
                                     {row.pointsFor.toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Pts Against">
                                     {row.pointsAgainst.toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Margin">
                                     {row.margin.toFixed(0)}
                                 </td>
-                                <td className="num">{row.playoffRecord}</td>
+                                <td className="num" data-label="Playoffs">
+                                    {row.playoffRecord}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

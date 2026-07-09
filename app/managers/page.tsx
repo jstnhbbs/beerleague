@@ -37,27 +37,33 @@ export default async function ManagersPage() {
                     <tbody>
                         {rankings.map((row) => (
                             <tr key={row.managerId}>
-                                <td className="rank-cell num">{row.rank}</td>
-                                <td>
+                                <td className="rank-cell num" data-label="#">
+                                    {row.rank}
+                                </td>
+                                <td className="almanac-row-title" data-label="Manager">
                                     <Link href={`/managers/${row.slug}`}>
                                         {row.name}
                                     </Link>
                                 </td>
-                                <td>{row.stats.currentTeamName ?? '—'}</td>
-                                <td className="num">{row.stats.seasons}</td>
-                                <td className="num">
+                                <td data-label="Current Team">
+                                    {row.stats.currentTeamName ?? '—'}
+                                </td>
+                                <td className="num" data-label="Seasons">
+                                    {row.stats.seasons}
+                                </td>
+                                <td className="num" data-label="Record">
                                     {formatCareerRecord(row.stats)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Win %">
                                     {formatCareerWinPct(row.stats)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Avg PR">
                                     {row.stats.avgPowerRating?.toFixed(1) ?? '—'}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Titles">
                                     {row.stats.championships}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Playoffs">
                                     {row.stats.playoffAppearances}
                                 </td>
                             </tr>

@@ -96,12 +96,15 @@ export default async function ManagerPage({ params }: ManagerPageProps) {
                                     entry.championshipWon ? 'champion-row' : ''
                                 }
                             >
-                                <td>
+                                <td
+                                    className="almanac-row-title"
+                                    data-label="Year"
+                                >
                                     <Link href={`/seasons/${entry.year}`}>
                                         {entry.year}
                                     </Link>
                                 </td>
-                                <td>
+                                <td data-label="Team">
                                     {entry.teamName}
                                     {entry.championshipWon && (
                                         <span className="champion-badge">
@@ -109,26 +112,28 @@ export default async function ManagerPage({ params }: ManagerPageProps) {
                                         </span>
                                     )}
                                 </td>
-                                <td className="num">{entry.finish}</td>
-                                <td className="num">
+                                <td className="num" data-label="Finish">
+                                    {entry.finish}
+                                </td>
+                                <td className="num" data-label="Record">
                                     {formatRecord(
                                         entry.regularSeasonWins,
                                         entry.regularSeasonLosses,
                                         entry.regularSeasonTies
                                     )}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Pts For">
                                     {entry.pointsFor.toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Pts Against">
                                     {entry.pointsAgainst.toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Margin">
                                     {(
                                         entry.pointsFor - entry.pointsAgainst
                                     ).toFixed(0)}
                                 </td>
-                                <td className="num">
+                                <td className="num" data-label="Playoffs">
                                     {entry.playoffAppearance
                                         ? formatRecord(
                                               entry.playoffWins,
