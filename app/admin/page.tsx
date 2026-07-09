@@ -30,6 +30,13 @@ export default async function AdminPage() {
                         <h2>Add Manager</h2>
                         <p>Register a new manager to the league history.</p>
                     </Link>
+                    <Link href="/admin/dues" className="almanac-card">
+                        <h2>Edit Dues Tracker</h2>
+                        <p>
+                            Mark active managers as paid and record their
+                            payment method.
+                        </p>
+                    </Link>
                     <Link href="/admin/archive" className="almanac-card">
                         <h2>Stats Archive</h2>
                         <p>

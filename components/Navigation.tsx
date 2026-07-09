@@ -9,6 +9,7 @@ const navItems = [
     { href: '/managers', label: 'Managers' },
     { href: '/seasons', label: 'Seasons' },
     { href: '/championships', label: 'Championships' },
+    { href: '/dues', label: 'Dues' },
     { href: '/rules', label: 'Rules' },
 ]
 

@@ -72,6 +72,13 @@ export default async function Home() {
                         teams, and season stats.
                     </p>
                 </Link>
+                <Link href="/dues" className="almanac-card">
+                    <h2>Dues Tracker</h2>
+                    <p>
+                        See which active managers are paid up and how dues were
+                        sent.
+                    </p>
+                </Link>
             </div>
         </div>
     )

@@ -55,6 +55,18 @@ export const seasonEntries = sqliteTable(
     })
 )
 
+export const dues = sqliteTable('dues', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    managerId: integer('manager_id')
+        .notNull()
+        .references(() => managers.id)
+        .unique(),
+    paid: integer('paid', { mode: 'boolean' }).notNull().default(false),
+    paymentMethod: text('payment_method'),
+    updatedAt: text('updated_at').notNull(),
+})
+
 export type Manager = typeof managers.$inferSelect
 export type Season = typeof seasons.$inferSelect
 export type SeasonEntry = typeof seasonEntries.$inferSelect
+export type Due = typeof dues.$inferSelect

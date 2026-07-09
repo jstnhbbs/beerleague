@@ -1,6 +1,6 @@
 import { asc, desc, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { managers, seasonEntries, seasons } from '@/lib/db/schema'
+import { dues, managers, seasonEntries, seasons } from '@/lib/db/schema'
 import {
     buildChampionshipViews,
     computeManagerCareerStats,
@@ -119,6 +119,49 @@ export async function getAllSeasonYears() {
     return rows.map((row) => row.year)
 }
 
+export async function getDuesTracker() {
+    const latestSeason = await db
+        .select({ id: seasons.id, year: seasons.year })
+        .from(seasons)
+        .orderBy(desc(seasons.year))
+        .limit(1)
+
+    if (!latestSeason[0]) {
+        return {
+            seasonYear: null,
+            rows: [],
+        }
+    }
+
+    const rows = await db
+        .select({
+            managerId: managers.id,
+            managerName: managers.name,
+            managerSlug: managers.slug,
+            currentTeamName: managers.currentTeamName,
+            teamName: seasonEntries.teamName,
+            finish: seasonEntries.finish,
+            paid: dues.paid,
+            paymentMethod: dues.paymentMethod,
+            updatedAt: dues.updatedAt,
+        })
+        .from(seasonEntries)
+        .innerJoin(managers, eq(seasonEntries.managerId, managers.id))
+        .leftJoin(dues, eq(dues.managerId, managers.id))
+        .where(eq(seasonEntries.seasonId, latestSeason[0].id))
+        .orderBy(asc(seasonEntries.finish))
+
+    return {
+        seasonYear: latestSeason[0].year,
+        rows: rows.map((row) => ({
+            ...row,
+            paid: row.paid ?? false,
+            paymentMethod: row.paymentMethod ?? null,
+            updatedAt: row.updatedAt ?? null,
+        })),
+    }
+}
+
 export async function getSeasonStandings(year: number) {
     const rows = await db
         .select({
@@ -192,5 +235,8 @@ export type ManagerProfile = NonNullable<
 export type SeasonStandingRow = Awaited<
     ReturnType<typeof getSeasonStandings>
 >[number]
+
+export type DuesTracker = Awaited<ReturnType<typeof getDuesTracker>>
+export type DuesTrackerRow = DuesTracker['rows'][number]
 
 export type { ManagerCareerStats, ManagerSeasonView }
