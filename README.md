@@ -1,83 +1,93 @@
-# Beer League Stats
+# Beer League Almanac
 
-A Next.js application for displaying team statistics from Google Sheets.
+Interactive fantasy football league history for Beer League — manager rankings, season standings, championships, dues tracking, and admin tools.
+
+Built with Next.js, Drizzle ORM, and Turso.
 
 ## Features
 
-- Landing page with links to all 10 teams
-- Rules page with league information
-- Individual team pages displaying Google Sheets with stats
-- Modern, responsive design
+- Manager rankings and career profiles
+- Year-by-year season standings
+- Championship history
+- Dues tracker for active managers
+- Admin dashboard for league updates
+- Legacy Google Sheets archive (admin only)
 
 ## Getting Started
 
-First, install the dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Then, run the development server:
+Copy environment variables:
+
+```bash
+cp .env.example .env
+```
+
+Fill in your Turso credentials and admin settings in `.env`, then push the schema:
+
+```bash
+npm run db:push
+```
+
+Import league history from the spreadsheet (optional):
+
+```bash
+npm run import
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Configuration
+## Environment Variables
 
-To update the Google Sheet URLs for each team, edit the `teamSheets` object in `app/teams/[teamId]/page.tsx`.
+| Variable | Description |
+|----------|-------------|
+| `TURSO_DATABASE_URL` | Turso/libSQL database URL |
+| `TURSO_AUTH_TOKEN` | Turso auth token |
+| `ADMIN_PASSWORD` | Password for `/admin` login |
+| `ADMIN_SESSION_SECRET` | Secret for signing admin session cookies |
+| `SPREADSHEET_PATH` | Local path to import spreadsheet (import script only) |
 
-To update team names, edit the `teamNames` object in the same file.
+## Scripts
 
-## Deployment to GitHub Pages
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run db:push` | Sync schema to Turso |
+| `npm run import` | Import spreadsheet data |
+| `npm run db:studio` | Open Drizzle Studio |
 
-This app is configured for automatic deployment to GitHub Pages.
+## Deployment (Vercel)
 
-### Setup Instructions
+This app is deployed on Vercel. GitHub Pages is no longer used.
 
-1. **Enable GitHub Pages in your repository:**
-   - Go to your repository settings on GitHub
-   - Navigate to "Pages" in the left sidebar
-   - Under "Source", select "GitHub Actions"
+1. Connect the GitHub repo to Vercel.
+2. Set the environment variables listed above in the Vercel project settings.
+3. Deploy from `main`.
 
-2. **Update the base path (if needed):**
-   - If your repository name is not `beerleague`, update the `NEXT_PUBLIC_BASE_PATH` in `.github/workflows/deploy.yml`
-   - Change `/beerleague` to match your repository name (e.g., `/your-repo-name`)
+The `vercel-build` script runs `db:push` before `next build`, so schema changes are applied automatically on deploy.
 
-3. **Push to main branch:**
-   - The GitHub Actions workflow will automatically build and deploy your site
-   - After the workflow completes, your site will be available at `https://yourusername.github.io/beerleague/`
+### Disable GitHub Pages
 
-### Manual Build
+If this repo previously used GitHub Pages, disable it in GitHub:
 
-To build the static site locally:
+**Settings → Pages → Source → None**
 
-```bash
-npm run build
-```
-
-The static files will be in the `out` directory.
-
-### Local Development with Base Path
-
-To test locally with the GitHub Pages base path:
-
-```bash
-NEXT_PUBLIC_BASE_PATH=/beerleague npm run dev
-```
-
-Then visit `http://localhost:3000/beerleague`
+That prevents the old static site from staying live at `https://<username>.github.io/beerleague/`.
 
 ## Project Structure
 
-- `app/` - Next.js App Router pages
-  - `page.tsx` - Landing page
-  - `rules/` - Rules page
-  - `teams/[teamId]/` - Dynamic team pages
-- `components/` - Reusable components
-  - `Navigation.tsx` - Navigation bar
-- `.github/workflows/` - GitHub Actions workflows
-  - `deploy.yml` - Automatic deployment to GitHub Pages
-# Trigger deployment
+- `app/` — Next.js App Router pages and API routes
+- `components/` — Shared UI components
+- `lib/` — Database, queries, auth, and stats
+- `scripts/` — Data import utilities
