@@ -37,6 +37,13 @@ export default async function AdminPage() {
                             payment method.
                         </p>
                     </Link>
+                    <Link href="/admin/keepers" className="almanac-card">
+                        <h2>Edit Keepers</h2>
+                        <p>
+                            Update keeper declarations, draft rounds, and
+                            first-round pick references.
+                        </p>
+                    </Link>
                     <Link href="/admin/archive" className="almanac-card">
                         <h2>Stats Archive</h2>
                         <p>

@@ -11,7 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "import": "tsx scripts/import-spreadsheet.ts"
+    "import": "tsx scripts/import-spreadsheet.ts",
+    "seed:keepers": "tsx scripts/seed-keepers.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",

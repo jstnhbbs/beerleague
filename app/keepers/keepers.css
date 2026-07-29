@@ -1,0 +1,86 @@
+.keepers-table th,
+.keepers-table td {
+    white-space: nowrap;
+}
+
+.keepers-ineligible {
+    color: #b45309;
+    font-weight: 600;
+}
+
+[data-theme='dark'] .keepers-ineligible {
+    color: #fbbf24;
+}
+
+.keepers-rules {
+    margin-top: 2.5rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+}
+
+[data-theme='dark'] .keepers-rules {
+    box-shadow: var(--shadow-card-dark);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.keepers-rules-title {
+    margin: 0;
+    padding: 0.85rem 1.25rem;
+    background: var(--header-bg);
+    color: var(--header-fg);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.keepers-rules-list {
+    margin: 0;
+    padding: 1.25rem 1.25rem 1.25rem 2.5rem;
+    line-height: 1.6;
+    color: var(--foreground-muted);
+}
+
+.keepers-rules-list li + li {
+    margin-top: 0.65rem;
+}
+
+.keepers-form {
+    max-width: none;
+}
+
+.keepers-form .admin-input,
+.keepers-form .admin-select {
+    width: 100%;
+    min-width: 5rem;
+}
+
+.keepers-form .keepers-player-input {
+    min-width: 10rem;
+}
+
+.keepers-form .keepers-first-round-input {
+    min-width: 9rem;
+}
+
+.keepers-sacrifice-preview {
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.keepers-sacrifice-preview.ineligible {
+    color: #b45309;
+}
+
+[data-theme='dark'] .keepers-sacrifice-preview.ineligible {
+    color: #fbbf24;
+}
+
+@media (max-width: 768px) {
+    .keepers-table th,
+    .keepers-table td {
+        white-space: normal;
+    }
+}

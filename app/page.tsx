@@ -79,6 +79,13 @@ export default async function Home() {
                         sent.
                     </p>
                 </Link>
+                <Link href="/keepers" className="almanac-card">
+                    <h2>Keepers</h2>
+                    <p>
+                        Current keeper declarations, draft pick costs, and
+                        eligibility for the upcoming draft.
+                    </p>
+                </Link>
             </div>
         </div>
     )

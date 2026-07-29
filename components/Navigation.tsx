@@ -10,6 +10,7 @@ const navItems = [
     { href: '/seasons', label: 'Seasons' },
     { href: '/championships', label: 'Championships' },
     { href: '/dues', label: 'Dues' },
+    { href: '/keepers', label: 'Keepers' },
     { href: '/rules', label: 'Rules' },
 ]
 

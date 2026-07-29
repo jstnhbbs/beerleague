@@ -66,7 +66,31 @@ export const dues = sqliteTable('dues', {
     updatedAt: text('updated_at').notNull(),
 })
 
+export const keepers = sqliteTable(
+    'keepers',
+    {
+        id: integer('id').primaryKey({ autoIncrement: true }),
+        keeperDraftYear: integer('keeper_draft_year').notNull(),
+        managerId: integer('manager_id')
+            .notNull()
+            .references(() => managers.id),
+        playerKept: text('player_kept'),
+        seasonDrafted: integer('season_drafted'),
+        roundKept: integer('round_kept'),
+        seasonsOnRoster: integer('seasons_on_roster'),
+        firstRoundPick: text('first_round_pick'),
+        updatedAt: text('updated_at').notNull(),
+    },
+    (table) => ({
+        uniqueManagerKeeperYear: unique().on(
+            table.keeperDraftYear,
+            table.managerId
+        ),
+    })
+)
+
 export type Manager = typeof managers.$inferSelect
 export type Season = typeof seasons.$inferSelect
 export type SeasonEntry = typeof seasonEntries.$inferSelect
 export type Due = typeof dues.$inferSelect
+export type Keeper = typeof keepers.$inferSelect

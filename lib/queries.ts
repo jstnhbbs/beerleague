@@ -1,6 +1,10 @@
-import { asc, desc, eq } from 'drizzle-orm'
+import { asc, desc, eq, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { dues, managers, seasonEntries, seasons } from '@/lib/db/schema'
+import {
+    CURRENT_KEEPER_DRAFT_YEAR,
+    calculateSacrificeRound,
+} from '@/lib/keepers'
+import { dues, keepers, managers, seasonEntries, seasons } from '@/lib/db/schema'
 import {
     buildChampionshipViews,
     computeManagerCareerStats,
@@ -194,6 +198,66 @@ export async function getChampionships() {
     return buildChampionshipViews(entries)
 }
 
+export async function getKeepersTracker() {
+    const latestSeason = await db
+        .select({ id: seasons.id, year: seasons.year })
+        .from(seasons)
+        .orderBy(desc(seasons.year))
+        .limit(1)
+
+    if (!latestSeason[0]) {
+        return {
+            keeperDraftYear: CURRENT_KEEPER_DRAFT_YEAR,
+            rows: [],
+        }
+    }
+
+    const rows = await db
+        .select({
+            managerId: managers.id,
+            managerName: managers.name,
+            managerSlug: managers.slug,
+            teamName: seasonEntries.teamName,
+            playerKept: keepers.playerKept,
+            seasonDrafted: keepers.seasonDrafted,
+            roundKept: keepers.roundKept,
+            seasonsOnRoster: keepers.seasonsOnRoster,
+            firstRoundPick: keepers.firstRoundPick,
+            updatedAt: keepers.updatedAt,
+        })
+        .from(seasonEntries)
+        .innerJoin(managers, eq(seasonEntries.managerId, managers.id))
+        .leftJoin(
+            keepers,
+            sql`${keepers.managerId} = ${managers.id} AND ${keepers.keeperDraftYear} = ${CURRENT_KEEPER_DRAFT_YEAR}`
+        )
+        .where(eq(seasonEntries.seasonId, latestSeason[0].id))
+        .orderBy(asc(seasonEntries.finish))
+
+    return {
+        keeperDraftYear: CURRENT_KEEPER_DRAFT_YEAR,
+        rows: rows.map((row) => {
+            const sacrificeRound = calculateSacrificeRound({
+                playerKept: row.playerKept,
+                roundKept: row.roundKept,
+                seasonsOnRoster: row.seasonsOnRoster,
+                firstRoundPick: row.firstRoundPick,
+            })
+
+            return {
+                ...row,
+                playerKept: row.playerKept ?? null,
+                seasonDrafted: row.seasonDrafted ?? null,
+                roundKept: row.roundKept ?? null,
+                seasonsOnRoster: row.seasonsOnRoster ?? null,
+                firstRoundPick: row.firstRoundPick ?? null,
+                sacrificeRound,
+                updatedAt: row.updatedAt ?? null,
+            }
+        }),
+    }
+}
+
 export async function getLeagueSummary() {
     const [managerCount, seasonYears, championships] = await Promise.all([
         db.select().from(managers),
@@ -238,5 +302,8 @@ export type SeasonStandingRow = Awaited<
 
 export type DuesTracker = Awaited<ReturnType<typeof getDuesTracker>>
 export type DuesTrackerRow = DuesTracker['rows'][number]
+
+export type KeepersTracker = Awaited<ReturnType<typeof getKeepersTracker>>
+export type KeepersTrackerRow = KeepersTracker['rows'][number]
 
 export type { ManagerCareerStats, ManagerSeasonView }
