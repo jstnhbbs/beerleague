@@ -232,7 +232,7 @@ export async function getKeepersTracker() {
             sql`${keepers.managerId} = ${managers.id} AND ${keepers.keeperDraftYear} = ${CURRENT_KEEPER_DRAFT_YEAR}`
         )
         .where(eq(seasonEntries.seasonId, latestSeason[0].id))
-        .orderBy(asc(seasonEntries.finish))
+        .orderBy(asc(managers.name))
 
     return {
         keeperDraftYear: CURRENT_KEEPER_DRAFT_YEAR,
