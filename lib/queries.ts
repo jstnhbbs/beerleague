@@ -153,7 +153,7 @@ export async function getDuesTracker() {
         .innerJoin(managers, eq(seasonEntries.managerId, managers.id))
         .leftJoin(dues, eq(dues.managerId, managers.id))
         .where(eq(seasonEntries.seasonId, latestSeason[0].id))
-        .orderBy(asc(seasonEntries.finish))
+        .orderBy(asc(managers.name))
 
     return {
         seasonYear: latestSeason[0].year,
