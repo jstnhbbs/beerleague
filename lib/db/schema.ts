@@ -102,6 +102,7 @@ export const adminUsers = sqliteTable('admin_users', {
     username: text('username').notNull().unique(),
     displayName: text('display_name').notNull(),
     passwordHash: text('password_hash').notNull(),
+    sessionVersion: integer('session_version').notNull().default(0),
     createdAt: text('created_at').notNull(),
     updatedAt: text('updated_at').notNull(),
 })

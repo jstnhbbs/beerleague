@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import type { AdminSession } from '@/lib/auth'
 import './Navigation.css'
 import ThemeToggle from './ThemeToggle'
@@ -27,6 +28,18 @@ interface NavigationProps {
 
 export default function Navigation({ adminSession }: NavigationProps) {
     const pathname = usePathname()
+    const [menuOpen, setMenuOpen] = useState(false)
+
+    useEffect(() => {
+        setMenuOpen(false)
+    }, [pathname])
+
+    useEffect(() => {
+        document.body.style.overflow = menuOpen ? 'hidden' : ''
+        return () => {
+            document.body.style.overflow = ''
+        }
+    }, [menuOpen])
 
     return (
         <header>
@@ -38,7 +51,32 @@ export default function Navigation({ adminSession }: NavigationProps) {
                     >
                         Beer League Almanac
                     </Link>
-                    <div className="nav-links">
+
+                    <div className="nav-actions">
+                        {adminSession && (
+                            <span className="nav-admin-badge nav-admin-badge-desktop">
+                                {adminSession.displayName}
+                            </span>
+                        )}
+                        <ThemeToggle />
+                        <button
+                            type="button"
+                            className="nav-menu-toggle"
+                            aria-expanded={menuOpen}
+                            aria-controls="primary-navigation"
+                            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                            onClick={() => setMenuOpen((open) => !open)}
+                        >
+                            <span className="nav-menu-bar" />
+                            <span className="nav-menu-bar" />
+                            <span className="nav-menu-bar" />
+                        </button>
+                    </div>
+
+                    <div
+                        id="primary-navigation"
+                        className={`nav-links ${menuOpen ? 'open' : ''}`}
+                    >
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
@@ -46,16 +84,16 @@ export default function Navigation({ adminSession }: NavigationProps) {
                                 className={`nav-link ${
                                     isActive(pathname, item.href) ? 'active' : ''
                                 }`}
+                                onClick={() => setMenuOpen(false)}
                             >
                                 {item.label}
                             </Link>
                         ))}
                         {adminSession && (
-                            <span className="nav-admin-badge">
+                            <span className="nav-admin-badge nav-admin-badge-mobile">
                                 {adminSession.displayName}
                             </span>
                         )}
-                        <ThemeToggle />
                     </div>
                 </div>
             </nav>

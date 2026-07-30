@@ -15,6 +15,11 @@ export interface AdminSession {
     displayName: string
 }
 
+interface SessionPayload {
+    adminUserId: number
+    sessionVersion: number
+}
+
 function getSessionSecret(): string {
     const secret = process.env.ADMIN_SESSION_SECRET
 
@@ -30,23 +35,33 @@ function getSessionSecret(): string {
     return secret ?? DEV_SESSION_SECRET
 }
 
-function signSession(adminUserId: number): string {
-    const payload = String(adminUserId)
+function signSession(adminUserId: number, sessionVersion: number): string {
+    const payload = `${adminUserId}:${sessionVersion}`
     const signature = createHmac('sha256', getSessionSecret())
         .update(payload)
         .digest('hex')
     return `${payload}.${signature}`
 }
 
-function parseSessionToken(token: string): number | null {
+function parseSessionToken(token: string): SessionPayload | null {
     const separator = token.lastIndexOf('.')
     if (separator === -1) return null
 
     const payload = token.slice(0, separator)
     const signature = token.slice(separator + 1)
-    const adminUserId = Number(payload)
+    const [adminUserIdPart, sessionVersionPart] = payload.split(':')
 
-    if (!Number.isInteger(adminUserId) || adminUserId <= 0) return null
+    const adminUserId = Number(adminUserIdPart)
+    const sessionVersion = Number(sessionVersionPart)
+
+    if (
+        !Number.isInteger(adminUserId) ||
+        adminUserId <= 0 ||
+        !Number.isInteger(sessionVersion) ||
+        sessionVersion < 0
+    ) {
+        return null
+    }
 
     const expected = createHmac('sha256', getSessionSecret())
         .update(payload)
@@ -57,7 +72,19 @@ function parseSessionToken(token: string): number | null {
     if (a.length !== b.length) return null
     if (!timingSafeEqual(a, b)) return null
 
-    return adminUserId
+    return { adminUserId, sessionVersion }
+}
+
+async function getAdminSessionVersion(
+    adminUserId: number
+): Promise<number | null> {
+    const rows = await db
+        .select({ sessionVersion: adminUsers.sessionVersion })
+        .from(adminUsers)
+        .where(eq(adminUsers.id, adminUserId))
+        .limit(1)
+
+    return rows[0]?.sessionVersion ?? null
 }
 
 export async function verifyAdminCredentials(
@@ -92,8 +119,11 @@ export async function verifyAdminCredentials(
 }
 
 export async function createAdminSession(adminUserId: number): Promise<void> {
+    const sessionVersion = await getAdminSessionVersion(adminUserId)
+    if (sessionVersion === null) return
+
     const cookieStore = await cookies()
-    cookieStore.set(COOKIE_NAME, signSession(adminUserId), {
+    cookieStore.set(COOKIE_NAME, signSession(adminUserId, sessionVersion), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -113,20 +143,30 @@ export async function getAdminSession(): Promise<AdminSession | null> {
         const token = cookieStore.get(COOKIE_NAME)?.value
         if (!token) return null
 
-        const adminUserId = parseSessionToken(token)
-        if (!adminUserId) return null
+        const payload = parseSessionToken(token)
+        if (!payload) return null
 
         const rows = await db
             .select({
                 id: adminUsers.id,
                 username: adminUsers.username,
                 displayName: adminUsers.displayName,
+                sessionVersion: adminUsers.sessionVersion,
             })
             .from(adminUsers)
-            .where(eq(adminUsers.id, adminUserId))
+            .where(eq(adminUsers.id, payload.adminUserId))
             .limit(1)
 
-        return rows[0] ?? null
+        const admin = rows[0]
+        if (!admin || admin.sessionVersion !== payload.sessionVersion) {
+            return null
+        }
+
+        return {
+            id: admin.id,
+            username: admin.username,
+            displayName: admin.displayName,
+        }
     } catch {
         return null
     }
@@ -151,6 +191,7 @@ export async function updateAdminPassword(
     const rows = await db
         .select({
             passwordHash: adminUsers.passwordHash,
+            sessionVersion: adminUsers.sessionVersion,
         })
         .from(adminUsers)
         .where(eq(adminUsers.id, adminUserId))
@@ -168,7 +209,11 @@ export async function updateAdminPassword(
 
     await db
         .update(adminUsers)
-        .set({ passwordHash, updatedAt })
+        .set({
+            passwordHash,
+            updatedAt,
+            sessionVersion: admin.sessionVersion + 1,
+        })
         .where(eq(adminUsers.id, adminUserId))
 
     return 'ok'

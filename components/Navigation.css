@@ -16,6 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 
 .nav-logo {
@@ -29,6 +30,12 @@
 .nav-logo:hover {
     color: var(--accent);
     transform: scale(1.05);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .nav-links {
@@ -65,24 +72,94 @@
     white-space: nowrap;
 }
 
+.nav-admin-badge-mobile {
+    display: none;
+}
+
+.nav-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.nav-menu-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    margin: 0 auto;
+    background: var(--header-fg);
+    border-radius: 1px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-menu-toggle[aria-expanded='true'] .nav-menu-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-menu-toggle[aria-expanded='true'] .nav-menu-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-menu-toggle[aria-expanded='true'] .nav-menu-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
 @media (max-width: 768px) {
     .nav-container {
         padding: 0 1rem;
-        gap: 1rem;
         flex-wrap: wrap;
     }
 
     .nav-logo {
         font-size: 1.25rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .nav-menu-toggle {
+        display: flex;
+    }
+
+    .nav-admin-badge-desktop {
+        display: none;
+    }
+
+    .nav-admin-badge-mobile {
+        display: block;
+        padding: 0.75rem 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 0.5rem;
     }
 
     .nav-links {
-        gap: 0.75rem;
-        flex-wrap: wrap;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        width: 100%;
+        order: 3;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-links.open {
+        display: flex;
     }
 
     .nav-link {
-        font-size: 0.9rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 1rem;
+        padding: 0.85rem 1rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        border-radius: 8px;
     }
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { parseJsonBody } from '@/lib/api'
-import { getAdminSession, requireAdmin, updateAdminPassword } from '@/lib/auth'
+import { getAdminSession, requireAdmin, updateAdminPassword, createAdminSession } from '@/lib/auth'
 
 export async function POST(request: Request) {
     if (!(await requireAdmin())) {
@@ -56,6 +56,8 @@ export async function POST(request: Request) {
             { status: 400 }
         )
     }
+
+    await createAdminSession(session.id)
 
     return NextResponse.json({ ok: true })
 }
