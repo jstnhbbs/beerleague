@@ -47,7 +47,6 @@ export default function AdminLoginForm() {
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
                     className="admin-input"
-                    placeholder="paul-bullington"
                 />
             </label>
             <label htmlFor="password" className="admin-field">
