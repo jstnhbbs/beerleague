@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
-import { createAdminSession, verifyAdminPassword } from '@/lib/auth'
+import { createAdminSession, verifyAdminCredentials } from '@/lib/auth'
 import { parseJsonBody } from '@/lib/api'
+import { normalizeAdminUsername } from '@/lib/admin-users'
 import { getClientIp, rateLimit } from '@/lib/rate-limit'
 
 const LOGIN_LIMIT = 5
@@ -24,15 +25,33 @@ export async function POST(request: Request) {
         )
     }
 
-    const parsed = await parseJsonBody<{ password?: string }>(request)
+    const parsed = await parseJsonBody<{
+        username?: string
+        password?: string
+    }>(request)
     if ('error' in parsed) return parsed.error
 
+    const username = normalizeAdminUsername(parsed.data.username)
     const password = String(parsed.data.password ?? '')
 
-    if (!verifyAdminPassword(password)) {
-        return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
+    if (!username || !password) {
+        return NextResponse.json(
+            { error: 'Username and password are required' },
+            { status: 400 }
+        )
     }
 
-    await createAdminSession()
-    return NextResponse.json({ ok: true })
+    const admin = await verifyAdminCredentials(username, password)
+    if (!admin) {
+        return NextResponse.json(
+            { error: 'Invalid username or password' },
+            { status: 401 }
+        )
+    }
+
+    await createAdminSession(admin.id)
+    return NextResponse.json({
+        ok: true,
+        displayName: admin.displayName,
+    })
 }

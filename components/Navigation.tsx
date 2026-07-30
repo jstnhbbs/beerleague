@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { AdminSession } from '@/lib/auth'
 import './Navigation.css'
 import ThemeToggle from './ThemeToggle'
 
@@ -12,6 +13,7 @@ const navItems = [
     { href: '/dues', label: 'Dues' },
     { href: '/keepers', label: 'Keepers' },
     { href: '/rules', label: 'Rules' },
+    { href: '/admin', label: 'Admin' },
 ]
 
 function isActive(pathname: string, href: string): boolean {
@@ -19,7 +21,11 @@ function isActive(pathname: string, href: string): boolean {
     return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export default function Navigation() {
+interface NavigationProps {
+    adminSession: AdminSession | null
+}
+
+export default function Navigation({ adminSession }: NavigationProps) {
     const pathname = usePathname()
 
     return (
@@ -44,6 +50,11 @@ export default function Navigation() {
                                 {item.label}
                             </Link>
                         ))}
+                        {adminSession && (
+                            <span className="nav-admin-badge">
+                                {adminSession.displayName}
+                            </span>
+                        )}
                         <ThemeToggle />
                     </div>
                 </div>

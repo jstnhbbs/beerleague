@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
-import Navigation from '@/components/Navigation'
+import AppNavigation from '@/components/AppNavigation'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
 const roboto = Roboto({
@@ -45,7 +45,7 @@ export default function RootLayout({
                     }}
                 />
                 <ThemeProvider>
-                    <Navigation />
+                    <AppNavigation />
                     <main>{children}</main>
                 </ThemeProvider>
             </body>

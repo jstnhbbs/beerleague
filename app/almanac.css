@@ -373,8 +373,35 @@
     gap: 0.5rem;
 }
 
-.dues-form {
-    max-width: none;
+.admin-link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-link-button:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+.admin-hub-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin: -0.5rem 0 2rem;
+}
+
+.admin-hub-section {
+    margin-bottom: 2.5rem;
+}
+
+.admin-hub-section .almanac-grid {
+    margin-bottom: 0;
 }
 
 .dues-method-select {

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 
 export default function AdminLoginForm() {
     const router = useRouter()
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -17,7 +18,7 @@ export default function AdminLoginForm() {
         const response = await fetch('/api/admin/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password }),
+            body: JSON.stringify({ username, password }),
         })
 
         if (!response.ok) {
@@ -35,13 +36,26 @@ export default function AdminLoginForm() {
         <form onSubmit={handleSubmit} className="admin-form">
             <h2>Admin Login</h2>
             <p style={{ margin: '0.75rem 0 1rem', color: 'var(--foreground-muted)' }}>
-                Enter the league admin password to make edits.
+                Sign in with your commissioner username and password.
             </p>
+            <label htmlFor="username" className="admin-field">
+                Username
+                <input
+                    id="username"
+                    type="text"
+                    autoComplete="username"
+                    value={username}
+                    onChange={(event) => setUsername(event.target.value)}
+                    className="admin-input"
+                    placeholder="paul-bullington"
+                />
+            </label>
             <label htmlFor="password" className="admin-field">
                 Password
                 <input
                     id="password"
                     type="password"
+                    autoComplete="current-password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     className="admin-input"

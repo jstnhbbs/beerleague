@@ -53,8 +53,10 @@ Open [http://localhost:3000](http://localhost:3000).
 |----------|-------------|
 | `TURSO_DATABASE_URL` | Turso/libSQL database URL |
 | `TURSO_AUTH_TOKEN` | Turso auth token |
-| `ADMIN_PASSWORD` | Password for `/admin` login |
 | `ADMIN_SESSION_SECRET` | Secret for signing admin session cookies |
+| `ADMIN_PASSWORD_PAUL` | Initial password for Paul (seed script only) |
+| `ADMIN_PASSWORD_GARRETT` | Initial password for Garrett (seed script only) |
+| `ADMIN_PASSWORD_JUSTIN` | Initial password for Justin (seed script only) |
 | `SPREADSHEET_PATH` | Local path to import spreadsheet (import script only) |
 
 ## Scripts
@@ -65,6 +67,8 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run build` | Production build |
 | `npm run db:push` | Sync schema to Turso |
 | `npm run import` | Import spreadsheet data |
+| `npm run seed:admins` | Create or reset commissioner admin accounts |
+| `npm run seed:keepers` | Seed keeper tracker data |
 | `npm run db:studio` | Open Drizzle Studio |
 
 ## Deployment (Vercel)

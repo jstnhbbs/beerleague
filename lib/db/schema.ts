@@ -89,8 +89,18 @@ export const keepers = sqliteTable(
     })
 )
 
+export const adminUsers = sqliteTable('admin_users', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    username: text('username').notNull().unique(),
+    displayName: text('display_name').notNull(),
+    passwordHash: text('password_hash').notNull(),
+    createdAt: text('created_at').notNull(),
+    updatedAt: text('updated_at').notNull(),
+})
+
 export type Manager = typeof managers.$inferSelect
 export type Season = typeof seasons.$inferSelect
 export type SeasonEntry = typeof seasonEntries.$inferSelect
 export type Due = typeof dues.$inferSelect
 export type Keeper = typeof keepers.$inferSelect
+export type AdminUser = typeof adminUsers.$inferSelect

@@ -58,6 +58,13 @@
     font-weight: 600;
 }
 
+.nav-admin-badge {
+    color: color-mix(in srgb, var(--header-fg) 80%, var(--accent));
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 @media (max-width: 768px) {
     .nav-container {
         padding: 0 1rem;
