@@ -14,24 +14,33 @@ export default function ManagerForm() {
         setError('')
 
         const formData = new FormData(event.currentTarget)
-        const response = await fetch('/api/admin/managers', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: formData.get('name'),
-            }),
-        })
 
-        if (!response.ok) {
+        try {
+            const response = await fetch('/api/admin/managers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.get('name'),
+                }),
+            })
+
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}))
+                setError(
+                    (data as { error?: string }).error ??
+                        'Failed to create manager'
+                )
+                return
+            }
+
             const data = await response.json()
-            setError(data.error ?? 'Failed to create manager')
+            router.push(`/managers/${data.slug}`)
+            router.refresh()
+        } catch {
+            setError('Network error. Check your connection and try again.')
+        } finally {
             setLoading(false)
-            return
         }
-
-        const data = await response.json()
-        router.push(`/managers/${data.slug}`)
-        router.refresh()
     }
 
     return (

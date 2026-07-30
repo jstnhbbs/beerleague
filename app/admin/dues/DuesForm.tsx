@@ -46,28 +46,35 @@ export default function DuesForm({ rows }: DuesFormProps) {
         setError('')
         setMessage('')
 
-        const response = await fetch('/api/admin/dues', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                dues: duesRows.map((row) => ({
-                    managerId: row.managerId,
-                    paid: row.paid,
-                    paymentMethod: row.paid ? row.paymentMethod : null,
-                })),
-            }),
-        })
+        try {
+            const response = await fetch('/api/admin/dues', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    dues: duesRows.map((row) => ({
+                        managerId: row.managerId,
+                        paid: row.paid,
+                        paymentMethod: row.paid ? row.paymentMethod : null,
+                    })),
+                }),
+            })
 
-        if (!response.ok) {
-            const data = await response.json()
-            setError(data.error ?? 'Failed to update dues')
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}))
+                setError(
+                    (data as { error?: string }).error ??
+                        'Failed to update dues'
+                )
+                return
+            }
+
+            setMessage('Dues tracker updated.')
+            router.refresh()
+        } catch {
+            setError('Network error. Check your connection and try again.')
+        } finally {
             setLoading(false)
-            return
         }
-
-        setMessage('Dues tracker updated.')
-        router.refresh()
-        setLoading(false)
     }
 
     return (

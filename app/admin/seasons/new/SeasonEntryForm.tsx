@@ -21,27 +21,34 @@ export default function SeasonEntryForm({ managers }: SeasonEntryFormProps) {
         const formData = new FormData(event.currentTarget)
         const payload = Object.fromEntries(formData.entries())
 
-        const response = await fetch('/api/admin/seasons', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                ...payload,
-                playoffAppearance: formData.get('playoffAppearance') === 'on',
-                playoffBye: formData.get('playoffBye') === 'on',
-                championshipWon: formData.get('championshipWon') === 'on',
-            }),
-        })
+        try {
+            const response = await fetch('/api/admin/seasons', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...payload,
+                    playoffAppearance: formData.get('playoffAppearance') === 'on',
+                    playoffBye: formData.get('playoffBye') === 'on',
+                    championshipWon: formData.get('championshipWon') === 'on',
+                }),
+            })
 
-        if (!response.ok) {
-            const data = await response.json()
-            setError(data.error ?? 'Failed to save season entry')
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}))
+                setError(
+                    (data as { error?: string }).error ??
+                        'Failed to save season entry'
+                )
+                return
+            }
+
+            router.push(`/seasons/${payload.year}`)
+            router.refresh()
+        } catch {
+            setError('Network error. Check your connection and try again.')
+        } finally {
             setLoading(false)
-            return
         }
-
-        router.push(`/seasons/${payload.year}`)
-        router.refresh()
-        setLoading(false)
     }
 
     return (

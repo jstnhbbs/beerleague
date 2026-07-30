@@ -18,6 +18,7 @@ interface DuesUpdateRequest {
 }
 
 interface ValidatedDuesUpdate {
+    seasonId: number
     managerId: number
     paid: boolean
     paymentMethod: string | null
@@ -40,6 +41,13 @@ export async function PUT(request: Request) {
     }
 
     const tracker = await getDuesTracker()
+    if (!tracker.seasonId) {
+        return NextResponse.json(
+            { error: 'No active season is available for dues tracking' },
+            { status: 400 }
+        )
+    }
+
     const activeManagerIds = new Set(
         tracker.rows.map((row) => row.managerId)
     )
@@ -69,6 +77,7 @@ export async function PUT(request: Request) {
         }
 
         updates.push({
+            seasonId: tracker.seasonId,
             managerId,
             paid,
             paymentMethod,
@@ -85,7 +94,7 @@ export async function PUT(request: Request) {
             .insert(dues)
             .values(updates)
             .onConflictDoUpdate({
-                target: dues.managerId,
+                target: [dues.seasonId, dues.managerId],
                 set: {
                     paid: sql`excluded.paid`,
                     paymentMethod: sql`excluded.payment_method`,
@@ -93,9 +102,11 @@ export async function PUT(request: Request) {
                 },
             })
     } catch (error) {
-        const message =
-            error instanceof Error ? error.message : 'Failed to update dues'
-        return NextResponse.json({ error: message }, { status: 400 })
+        console.error('Failed to update dues:', error)
+        return NextResponse.json(
+            { error: 'Failed to update dues' },
+            { status: 400 }
+        )
     }
 
     return NextResponse.json({ ok: true })

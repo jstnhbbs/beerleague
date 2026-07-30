@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "npm run db:push && next build",
+    "vercel-build": "npm run migrate:dues && npm run db:push && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
@@ -13,7 +13,8 @@
     "db:studio": "drizzle-kit studio",
     "import": "tsx scripts/import-spreadsheet.ts",
     "seed:keepers": "tsx scripts/seed-keepers.ts",
-    "seed:admins": "tsx scripts/seed-admins.ts"
+    "seed:admins": "tsx scripts/seed-admins.ts",
+    "migrate:dues": "tsx scripts/migrate-dues-season.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",

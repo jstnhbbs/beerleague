@@ -584,4 +584,36 @@ button.almanac-card {
         color: var(--foreground);
         font-weight: 600;
     }
+
+    .admin-form {
+        padding: 1rem;
+    }
+
+    .admin-button {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .admin-form .almanac-table td {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.35rem;
+        text-align: left;
+    }
+
+    .admin-form .almanac-table td::before {
+        flex-shrink: 1;
+    }
+
+    .admin-form .admin-input,
+    .admin-form .admin-select,
+    .dues-method-select {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .admin-checkbox {
+        min-height: 44px;
+        align-items: center;
+    }
 }

@@ -66,6 +66,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run dev` | Start development server |
 | `npm run build` | Production build |
 | `npm run db:push` | Sync schema to Turso |
+| `npm run migrate:dues` | Migrate legacy dues rows to the latest season |
 | `npm run import` | Import spreadsheet data |
 | `npm run seed:admins` | Create or reset commissioner admin accounts |
 | `npm run seed:keepers` | Seed keeper tracker data |

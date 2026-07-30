@@ -112,31 +112,38 @@ export default function KeepersForm({ rows }: KeepersFormProps) {
         setError('')
         setMessage('')
 
-        const response = await fetch('/api/admin/keepers', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                keepers: keeperRows.map((row) => ({
-                    managerId: row.managerId,
-                    playerKept: row.playerKept,
-                    seasonDrafted: row.seasonDrafted,
-                    roundKept: row.roundKept,
-                    seasonsOnRoster: row.seasonsOnRoster,
-                    firstRoundPick: row.firstRoundPick,
-                })),
-            }),
-        })
+        try {
+            const response = await fetch('/api/admin/keepers', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    keepers: keeperRows.map((row) => ({
+                        managerId: row.managerId,
+                        playerKept: row.playerKept,
+                        seasonDrafted: row.seasonDrafted,
+                        roundKept: row.roundKept,
+                        seasonsOnRoster: row.seasonsOnRoster,
+                        firstRoundPick: row.firstRoundPick,
+                    })),
+                }),
+            })
 
-        if (!response.ok) {
-            const data = await response.json()
-            setError(data.error ?? 'Failed to update keepers')
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}))
+                setError(
+                    (data as { error?: string }).error ??
+                        'Failed to update keepers'
+                )
+                return
+            }
+
+            setMessage('Keepers updated.')
+            router.refresh()
+        } catch {
+            setError('Network error. Check your connection and try again.')
+        } finally {
             setLoading(false)
-            return
         }
-
-        setMessage('Keepers updated.')
-        router.refresh()
-        setLoading(false)
     }
 
     return (

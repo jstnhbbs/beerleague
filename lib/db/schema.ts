@@ -55,16 +55,24 @@ export const seasonEntries = sqliteTable(
     })
 )
 
-export const dues = sqliteTable('dues', {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    managerId: integer('manager_id')
-        .notNull()
-        .references(() => managers.id)
-        .unique(),
-    paid: integer('paid', { mode: 'boolean' }).notNull().default(false),
-    paymentMethod: text('payment_method'),
-    updatedAt: text('updated_at').notNull(),
-})
+export const dues = sqliteTable(
+    'dues',
+    {
+        id: integer('id').primaryKey({ autoIncrement: true }),
+        seasonId: integer('season_id')
+            .notNull()
+            .references(() => seasons.id),
+        managerId: integer('manager_id')
+            .notNull()
+            .references(() => managers.id),
+        paid: integer('paid', { mode: 'boolean' }).notNull().default(false),
+        paymentMethod: text('payment_method'),
+        updatedAt: text('updated_at').notNull(),
+    },
+    (table) => ({
+        uniqueSeasonManager: unique().on(table.seasonId, table.managerId),
+    })
+)
 
 export const keepers = sqliteTable(
     'keepers',

@@ -18,29 +18,36 @@ export default function ChangePasswordForm() {
         setError('')
         setMessage('')
 
-        const response = await fetch('/api/admin/change-password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                currentPassword,
-                newPassword,
-                confirmPassword,
-            }),
-        })
+        try {
+            const response = await fetch('/api/admin/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    currentPassword,
+                    newPassword,
+                    confirmPassword,
+                }),
+            })
 
-        if (!response.ok) {
-            const data = await response.json()
-            setError(data.error ?? 'Failed to update password')
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}))
+                setError(
+                    (data as { error?: string }).error ??
+                        'Failed to update password'
+                )
+                return
+            }
+
+            setCurrentPassword('')
+            setNewPassword('')
+            setConfirmPassword('')
+            setMessage('Password updated.')
+            router.refresh()
+        } catch {
+            setError('Network error. Check your connection and try again.')
+        } finally {
             setLoading(false)
-            return
         }
-
-        setCurrentPassword('')
-        setNewPassword('')
-        setConfirmPassword('')
-        setMessage('Password updated.')
-        router.refresh()
-        setLoading(false)
     }
 
     return (

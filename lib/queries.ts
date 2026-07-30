@@ -132,6 +132,7 @@ export async function getDuesTracker() {
 
     if (!latestSeason[0]) {
         return {
+            seasonId: null,
             seasonYear: null,
             rows: [],
         }
@@ -151,11 +152,15 @@ export async function getDuesTracker() {
         })
         .from(seasonEntries)
         .innerJoin(managers, eq(seasonEntries.managerId, managers.id))
-        .leftJoin(dues, eq(dues.managerId, managers.id))
+        .leftJoin(
+            dues,
+            sql`${dues.managerId} = ${managers.id} AND ${dues.seasonId} = ${latestSeason[0].id}`
+        )
         .where(eq(seasonEntries.seasonId, latestSeason[0].id))
         .orderBy(asc(managers.name))
 
     return {
+        seasonId: latestSeason[0].id,
         seasonYear: latestSeason[0].year,
         rows: rows.map((row) => ({
             ...row,

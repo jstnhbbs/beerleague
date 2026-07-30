@@ -15,21 +15,27 @@ export default function AdminLoginForm() {
         setLoading(true)
         setError('')
 
-        const response = await fetch('/api/admin/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        })
+        try {
+            const response = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            })
 
-        if (!response.ok) {
-            const data = await response.json()
-            setError(data.error ?? 'Login failed')
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}))
+                setError(
+                    (data as { error?: string }).error ?? 'Login failed'
+                )
+                return
+            }
+
+            router.refresh()
+        } catch {
+            setError('Network error. Check your connection and try again.')
+        } finally {
             setLoading(false)
-            return
         }
-
-        router.refresh()
-        setLoading(false)
     }
 
     return (
