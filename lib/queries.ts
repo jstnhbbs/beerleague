@@ -270,25 +270,21 @@ export async function getLeagueSummary() {
         getChampionships(),
     ])
 
-    const championshipCounts = new Map<string, number>()
-    for (const championship of championships) {
-        championshipCounts.set(
-            championship.managerName,
-            (championshipCounts.get(championship.managerName) ?? 0) + 1
-        )
-    }
-
-    const topChampion = [...championshipCounts.entries()].sort(
-        (a, b) => b[1] - a[1]
-    )[0]
+    const latestChampion = championships.find(
+        (championship) => championship.year === seasonYears[0]
+    )
 
     return {
         managerCount: managerCount.length,
         firstSeason: seasonYears.at(-1) ?? null,
         latestSeason: seasonYears[0] ?? null,
         championshipCount: championships.length,
-        topChampion: topChampion
-            ? { name: topChampion[0], count: topChampion[1] }
+        latestChampion: latestChampion
+            ? {
+                  managerName: latestChampion.managerName,
+                  teamName: latestChampion.teamName,
+                  year: latestChampion.year,
+              }
             : null,
     }
 }

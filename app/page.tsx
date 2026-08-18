@@ -10,7 +10,7 @@ export default async function Home() {
     return (
         <div className="container">
             <header className="almanac-hero">
-                <p className="almanac-eyebrow">Est. 2007 · HuskieFantasy</p>
+                <p className="almanac-eyebrow">EST. 2015</p>
                 <h1 className="almanac-title">Beer League Almanac</h1>
                 <p className="almanac-subtitle">
                     The complete interactive history of the league — managers,
@@ -38,13 +38,13 @@ export default async function Home() {
                     </div>
                     <div className="almanac-stat-label">Championships</div>
                 </div>
-                {summary.topChampion && (
+                {summary.latestChampion && (
                     <div className="almanac-stat">
                         <div className="almanac-stat-value">
-                            {summary.topChampion.count}
+                            {summary.latestChampion.teamName}
                         </div>
                         <div className="almanac-stat-label">
-                            Titles · {summary.topChampion.name}
+                            Current Champion · {summary.latestChampion.managerName}
                         </div>
                     </div>
                 )}
@@ -70,13 +70,6 @@ export default async function Home() {
                     <p>
                         Every title run from 2015 to present — the champions,
                         teams, and season stats.
-                    </p>
-                </Link>
-                <Link href="/dues" className="almanac-card">
-                    <h2>Dues Tracker</h2>
-                    <p>
-                        See which active managers are paid up and how dues were
-                        sent.
                     </p>
                 </Link>
                 <Link href="/keepers" className="almanac-card">

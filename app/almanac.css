@@ -181,6 +181,42 @@
     white-space: nowrap;
 }
 
+.sort-header-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 1.5rem;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+}
+
+.sort-header-button:hover,
+.sort-header-button:focus-visible {
+    color: var(--accent);
+}
+
+.sort-header-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.sort-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.85rem;
+    color: color-mix(in srgb, currentColor 70%, transparent);
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
 .almanac-table tbody tr {
     transition: background 0.2s ease;
 }
