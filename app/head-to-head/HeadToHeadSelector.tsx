@@ -12,7 +12,7 @@ export default function HeadToHeadSelector({
     managers,
     matrix,
 }: HeadToHeadSelectorProps) {
-    const [selectedManager, setSelectedManager] = useState(managers[0] ?? '')
+    const [selectedManager, setSelectedManager] = useState('')
 
     const selectedRow = useMemo(
         () => matrix.find((row) => row.manager === selectedManager),
@@ -38,6 +38,7 @@ export default function HeadToHeadSelector({
                     value={selectedManager}
                     onChange={(event) => setSelectedManager(event.target.value)}
                 >
+                    <option value="">Select a manager</option>
                     {managers.map((manager) => (
                         <option key={manager} value={manager}>
                             {manager}
@@ -46,31 +47,33 @@ export default function HeadToHeadSelector({
                 </select>
             </div>
 
-            <div className="almanac-table-wrap h2h-manager-table-wrap">
-                <table className="almanac-table h2h-manager-table">
-                    <thead>
-                        <tr>
-                            <th>Opponent</th>
-                            <th>Record</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {matchupRows.map((matchup) => (
-                            <tr key={matchup.opponent}>
-                                <td
-                                    className="almanac-row-title"
-                                    data-label="Opponent"
-                                >
-                                    {matchup.opponent}
-                                </td>
-                                <td className="num" data-label="Record">
-                                    {matchup.record}
-                                </td>
+            {selectedManager ? (
+                <div className="almanac-table-wrap h2h-manager-table-wrap">
+                    <table className="almanac-table h2h-manager-table">
+                        <thead>
+                            <tr>
+                                <th>Opponent</th>
+                                <th>Record</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {matchupRows.map((matchup) => (
+                                <tr key={matchup.opponent}>
+                                    <td
+                                        className="almanac-row-title"
+                                        data-label="Opponent"
+                                    >
+                                        {matchup.opponent}
+                                    </td>
+                                    <td className="num" data-label="Record">
+                                        {matchup.record}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            ) : null}
         </section>
     )
 }
