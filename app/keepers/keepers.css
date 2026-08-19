@@ -3,6 +3,34 @@
     white-space: nowrap;
 }
 
+.keepers-table {
+    --keepers-group-border: 3px solid color-mix(in srgb, var(--accent) 55%, var(--border-light));
+}
+
+.keepers-table th:nth-child(1),
+.keepers-table td:nth-child(1),
+.keepers-table th:nth-child(7),
+.keepers-table td:nth-child(7) {
+    border-left: var(--keepers-group-border);
+}
+
+.keepers-table th:nth-child(6),
+.keepers-table td:nth-child(6),
+.keepers-table th:nth-child(7),
+.keepers-table td:nth-child(7) {
+    border-right: var(--keepers-group-border);
+}
+
+.keepers-table thead th:nth-child(-n + 6),
+.keepers-table thead th:nth-child(7) {
+    border-top: var(--keepers-group-border);
+}
+
+.keepers-table tbody tr:last-child td:nth-child(-n + 6),
+.keepers-table tbody tr:last-child td:nth-child(7) {
+    border-bottom: var(--keepers-group-border);
+}
+
 .keepers-ineligible {
     color: #b45309;
     font-weight: 600;
@@ -78,14 +106,12 @@
     color: #fbbf24;
 }
 
-.keepers-tenure-field {
-    display: grid;
-    gap: 0.35rem;
-}
-
 @media (max-width: 768px) {
     .keepers-table th,
     .keepers-table td {
         white-space: normal;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
     }
 }

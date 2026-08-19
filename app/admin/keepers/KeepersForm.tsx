@@ -4,7 +4,6 @@ import {
     calculateSacrificeRound,
     DEFAULT_WAIVER_ROUND,
     firstRoundPickColumnLabel,
-    isMaxKeeperTenure,
     normalizePlayerName,
     normalizeRoundKept,
     normalizeSeasonDrafted,
@@ -237,33 +236,24 @@ export default function KeepersForm({ rows }: KeepersFormProps) {
                                     </span>
                                 </td>
                                 <td data-label="Seasons on Roster">
-                                    <div className="keepers-tenure-field">
-                                        <input
-                                            type="number"
-                                            className="admin-input"
-                                            value={toInputValue(
-                                                row.seasonsOnRoster
-                                            )}
-                                            disabled={!row.playerKept}
-                                            min={1}
-                                            max={3}
-                                            onChange={(event) =>
-                                                updateRow(row.managerId, {
-                                                    seasonsOnRoster:
-                                                        normalizeSeasonsOnRoster(
-                                                            event.target.value
-                                                        ),
-                                                })
-                                            }
-                                        />
-                                        {isMaxKeeperTenure(
+                                    <input
+                                        type="number"
+                                        className="admin-input"
+                                        value={toInputValue(
                                             row.seasonsOnRoster
-                                        ) && (
-                                            <span className="keepers-ineligible">
-                                                Not Eligible
-                                            </span>
                                         )}
-                                    </div>
+                                        disabled={!row.playerKept}
+                                        min={1}
+                                        max={3}
+                                        onChange={(event) =>
+                                            updateRow(row.managerId, {
+                                                seasonsOnRoster:
+                                                    normalizeSeasonsOnRoster(
+                                                        event.target.value
+                                                    ),
+                                            })
+                                        }
+                                    />
                                 </td>
                                 <td data-label={firstRoundPickColumnLabel()}>
                                     <input
