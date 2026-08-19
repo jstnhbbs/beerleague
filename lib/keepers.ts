@@ -60,7 +60,7 @@ export function calculateSacrificeRound(
 
     if (roundKept === 1) return 'Not Eligible'
     if (playersMatch(playerKept, input.firstRoundPick)) return 'Not Eligible'
-    if (seasonsOnRoster > MAX_SEASONS_ON_ROSTER) return 'Not Eligible'
+    if (isMaxKeeperTenure(seasonsOnRoster)) return 'Not Eligible'
 
     const keeperYears = seasonsOnRoster - 1
     const sacrificeRound = roundKept - keeperYears
@@ -68,6 +68,16 @@ export function calculateSacrificeRound(
     if (sacrificeRound < 1) return 'Not Eligible'
 
     return String(sacrificeRound)
+}
+
+export function isMaxKeeperTenure(
+    seasonsOnRoster: number | null | undefined
+): boolean {
+    return (
+        seasonsOnRoster !== null &&
+        seasonsOnRoster !== undefined &&
+        seasonsOnRoster >= MAX_SEASONS_ON_ROSTER
+    )
 }
 
 export function displayKeeperValue(value: string | number | null): string {

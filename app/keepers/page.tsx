@@ -3,6 +3,7 @@ import {
     KEEPER_RULES,
     displayKeeperValue,
     firstRoundPickColumnLabel,
+    isMaxKeeperTenure,
     keeperSeasonLabel,
     sacrificeColumnLabel,
 } from '@/lib/keepers'
@@ -78,7 +79,13 @@ export default async function KeepersPage() {
                                     )}
                                 </td>
                                 <td data-label="Seasons on Roster">
-                                    {displayKeeperValue(row.seasonsOnRoster)}
+                                    {isMaxKeeperTenure(row.seasonsOnRoster) ? (
+                                        <span className="keepers-ineligible">
+                                            Not Eligible
+                                        </span>
+                                    ) : (
+                                        displayKeeperValue(row.seasonsOnRoster)
+                                    )}
                                 </td>
                                 <td data-label={firstRoundPickColumnLabel()}>
                                     {displayKeeperValue(row.firstRoundPick)}

@@ -78,6 +78,11 @@
     color: #fbbf24;
 }
 
+.keepers-tenure-field {
+    display: grid;
+    gap: 0.35rem;
+}
+
 @media (max-width: 768px) {
     .keepers-table th,
     .keepers-table td {
