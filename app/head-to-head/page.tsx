@@ -5,12 +5,35 @@ import {
     headToHeadSeasonCounts,
     headToHeadSourceGameCount,
 } from '@/lib/head-to-head'
+import HeadToHeadSelector from './HeadToHeadSelector'
 import '../almanac.css'
 
 export { dynamic } from '@/lib/db/route-config'
 
 export default function HeadToHeadPage() {
     const seasons = Object.entries(headToHeadSeasonCounts)
+    const sortedManagers = [...headToHeadManagers].sort((a, b) =>
+        a.localeCompare(b),
+    )
+    const matrixByManager = new Map(
+        headToHeadMatrix.map((row) => [row.manager, row]),
+    )
+    const originalManagerIndex = new Map(
+        headToHeadManagers.map((manager, index) => [manager, index]),
+    )
+    const sortedMatrix = sortedManagers.map((manager) => {
+        const sourceRow = matrixByManager.get(manager)
+        return {
+            manager,
+            records: sortedManagers.map((opponent) => {
+                const recordIndex = originalManagerIndex.get(opponent)
+                if (!sourceRow || recordIndex === undefined) {
+                    return '0-0'
+                }
+                return sourceRow.records[recordIndex] ?? '0-0'
+            }),
+        }
+    })
 
     return (
         <div className="container">
@@ -46,6 +69,11 @@ export default function HeadToHeadPage() {
 
             <div className="h2h-layout">
                 <section>
+                    <HeadToHeadSelector
+                        managers={sortedManagers}
+                        matrix={sortedMatrix}
+                    />
+
                     <h2 className="almanac-section-title">
                         Manager Matrix
                     </h2>
@@ -56,13 +84,13 @@ export default function HeadToHeadPage() {
                                     <th className="h2h-sticky h2h-corner">
                                         Manager
                                     </th>
-                                    {headToHeadManagers.map((manager) => (
+                                    {sortedManagers.map((manager) => (
                                         <th key={manager}>{manager}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {headToHeadMatrix.map((row) => (
+                                {sortedMatrix.map((row) => (
                                     <tr key={row.manager}>
                                         <th
                                             className="h2h-sticky"
@@ -74,16 +102,14 @@ export default function HeadToHeadPage() {
                                             const isSelf = record === '-'
                                             return (
                                                 <td
-                                                    key={`${row.manager}-${headToHeadManagers[index]}`}
+                                                    key={`${row.manager}-${sortedManagers[index]}`}
                                                     className={
                                                         isSelf
                                                             ? 'num h2h-self'
                                                             : 'num'
                                                     }
                                                     data-label={
-                                                        headToHeadManagers[
-                                                            index
-                                                        ]
+                                                        sortedManagers[index]
                                                     }
                                                 >
                                                     {record}

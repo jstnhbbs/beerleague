@@ -338,6 +338,51 @@
     font-size: 0.78rem;
 }
 
+.h2h-manager-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme='dark'] .h2h-manager-card {
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-card-dark);
+}
+
+.h2h-manager-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.h2h-manager-controls label {
+    color: var(--foreground);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.h2h-manager-select {
+    justify-self: end;
+}
+
+.h2h-manager-table-wrap {
+    max-height: 24rem;
+}
+
+.h2h-manager-table {
+    min-width: 0;
+}
+
+.h2h-manager-table th,
+.h2h-manager-table td {
+    width: 50%;
+}
+
 .h2h-table th,
 .h2h-table td {
     padding: 0.55rem 0.65rem;
@@ -759,6 +804,52 @@ button.almanac-card {
 
     .h2h-table td::before {
         display: none;
+    }
+
+    .h2h-manager-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .h2h-manager-select {
+        justify-self: stretch;
+    }
+
+    .h2h-manager-table-wrap {
+        overflow-x: visible;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        max-height: none;
+    }
+
+    .h2h-manager-table thead {
+        display: none;
+    }
+
+    .h2h-manager-table tbody {
+        display: block;
+    }
+
+    .h2h-manager-table tbody tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        background: var(--card-bg);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .h2h-manager-table td {
+        display: flex;
+        width: auto;
+        padding: 0.4rem 0;
+        border: none;
+    }
+
+    .h2h-manager-table td::before {
+        display: block;
     }
 
     .admin-form {
