@@ -1,7 +1,6 @@
 import {
     headToHeadManagers,
     headToHeadMatrix,
-    headToHeadNotes,
     headToHeadSeasonCounts,
     headToHeadSourceGameCount,
 } from '@/lib/head-to-head'
@@ -122,23 +121,6 @@ export default function HeadToHeadPage() {
                         </table>
                     </div>
                 </section>
-
-                <aside className="h2h-notes">
-                    <h2>Source Notes</h2>
-                    {headToHeadNotes.map((note) => (
-                        <p key={note}>{note}</p>
-                    ))}
-
-                    <h3>Games by Season</h3>
-                    <dl className="h2h-season-counts">
-                        {seasons.map(([year, count]) => (
-                            <div key={year}>
-                                <dt>{year}</dt>
-                                <dd>{count}</dd>
-                            </div>
-                        ))}
-                    </dl>
-                </aside>
             </div>
         </div>
     )

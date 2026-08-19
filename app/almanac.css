@@ -416,61 +416,6 @@
     font-weight: 700;
 }
 
-.h2h-notes {
-    background: var(--card-bg);
-    border: 1px solid var(--border-light);
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: var(--shadow-sm);
-}
-
-[data-theme='dark'] .h2h-notes {
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: var(--shadow-card-dark);
-}
-
-.h2h-notes h2,
-.h2h-notes h3 {
-    margin: 0 0 0.75rem;
-    color: var(--foreground);
-}
-
-.h2h-notes h3 {
-    margin-top: 1.25rem;
-    font-size: 1rem;
-}
-
-.h2h-notes p {
-    margin: 0 0 0.75rem;
-    color: var(--foreground-muted);
-    line-height: 1.5;
-}
-
-.h2h-season-counts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
-    gap: 0.5rem;
-    margin: 0;
-}
-
-.h2h-season-counts div {
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 0.5rem;
-    text-align: center;
-}
-
-.h2h-season-counts dt {
-    color: var(--foreground-muted);
-    font-size: 0.75rem;
-}
-
-.h2h-season-counts dd {
-    margin: 0.2rem 0 0;
-    color: var(--accent);
-    font-weight: 700;
-}
-
 .admin-form {
     background: var(--card-bg);
     border-radius: 12px;
