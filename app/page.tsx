@@ -58,6 +58,13 @@ export default async function Home() {
                         every manager in league history.
                     </p>
                 </Link>
+                <Link href="/head-to-head" className="almanac-card">
+                    <h2>Head-to-Head</h2>
+                    <p>
+                        Manager matchup records across the full schedule
+                        history.
+                    </p>
+                </Link>
                 <Link href="/seasons" className="almanac-card">
                     <h2>Season Standings</h2>
                     <p>

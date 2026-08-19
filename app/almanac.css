@@ -323,6 +323,109 @@
     white-space: nowrap;
 }
 
+.h2h-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+}
+
+.h2h-table-wrap {
+    max-height: 72vh;
+}
+
+.h2h-table {
+    min-width: 1900px;
+    font-size: 0.78rem;
+}
+
+.h2h-table th,
+.h2h-table td {
+    padding: 0.55rem 0.65rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.h2h-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.h2h-table .h2h-sticky {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 11rem;
+    text-align: left;
+    background: var(--header-bg);
+    color: var(--header-fg);
+}
+
+.h2h-table thead .h2h-sticky {
+    z-index: 3;
+}
+
+.h2h-self {
+    background: color-mix(in srgb, var(--foreground-muted) 14%, transparent);
+    color: var(--foreground-muted);
+    font-weight: 700;
+}
+
+.h2h-notes {
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme='dark'] .h2h-notes {
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-card-dark);
+}
+
+.h2h-notes h2,
+.h2h-notes h3 {
+    margin: 0 0 0.75rem;
+    color: var(--foreground);
+}
+
+.h2h-notes h3 {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+}
+
+.h2h-notes p {
+    margin: 0 0 0.75rem;
+    color: var(--foreground-muted);
+    line-height: 1.5;
+}
+
+.h2h-season-counts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.h2h-season-counts div {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.h2h-season-counts dt {
+    color: var(--foreground-muted);
+    font-size: 0.75rem;
+}
+
+.h2h-season-counts dd {
+    margin: 0.2rem 0 0;
+    color: var(--accent);
+    font-weight: 700;
+}
+
 .admin-form {
     background: var(--card-bg);
     border-radius: 12px;
@@ -619,6 +722,43 @@ button.almanac-card {
         width: auto;
         color: var(--foreground);
         font-weight: 600;
+    }
+
+    .h2h-table-wrap {
+        overflow-x: auto;
+        background: var(--card-bg);
+        box-shadow: var(--shadow-sm);
+        border-radius: 12px;
+        max-height: 70vh;
+    }
+
+    .h2h-table thead {
+        display: table-header-group;
+    }
+
+    .h2h-table tbody {
+        display: table-row-group;
+    }
+
+    .h2h-table tbody tr {
+        display: table-row;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .h2h-table td {
+        display: table-cell;
+        padding: 0.55rem 0.65rem;
+        border: 1px solid var(--border-light);
+        text-align: center;
+    }
+
+    .h2h-table td::before {
+        display: none;
     }
 
     .admin-form {

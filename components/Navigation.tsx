@@ -9,6 +9,7 @@ import ThemeToggle from './ThemeToggle'
 
 const navItems = [
     { href: '/managers', label: 'Managers' },
+    { href: '/head-to-head', label: 'H2H' },
     { href: '/seasons', label: 'Seasons' },
     { href: '/championships', label: 'Championships' },
     { href: '/dues', label: 'Dues' },
