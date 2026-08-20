@@ -1,4 +1,5 @@
 import { KEEPER_RULES } from '@/lib/keepers'
+import RulesSidebar from './RulesSidebar'
 import './rules.css'
 
 const RULE_NAV_LINKS = [
@@ -23,14 +24,7 @@ export default function RulesPage() {
                 <h1 className="rules-title">League Rules</h1>
 
                 <div className="rules-layout">
-                    <nav className="rules-sidebar" aria-label="Rules sections">
-                        <div className="rules-sidebar-title">Contents</div>
-                        {RULE_NAV_LINKS.map((link) => (
-                            <a key={link.href} href={link.href}>
-                                {link.label}
-                            </a>
-                        ))}
-                    </nav>
+                    <RulesSidebar links={RULE_NAV_LINKS} />
 
                     <div className="rules-content">
                         <section className="rule-section">

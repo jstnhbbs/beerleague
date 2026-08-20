@@ -66,6 +66,11 @@
     color: var(--foreground);
 }
 
+.rules-sidebar a[aria-current='true'] {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--foreground);
+}
+
 .rules-content {
     padding: 2rem;
 }
