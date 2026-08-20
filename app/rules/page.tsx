@@ -65,11 +65,11 @@ export default function RulesPage() {
 
                     <section className="rule-section" id="keeper-rules">
                         <h2>Keepers</h2>
-                        <ol>
+                        <ul>
                             {KEEPER_RULES.map((rule) => (
                                 <li key={rule}>{rule}</li>
                             ))}
-                        </ol>
+                        </ul>
                     </section>
 
                     <section className="rule-section" id="rosters">

@@ -96,11 +96,11 @@ export default async function KeepersPage() {
                         View in League Rules
                     </Link>
                 </div>
-                <ol className="keepers-rules-list">
+                <ul className="keepers-rules-list">
                     {KEEPER_RULES.map((rule) => (
                         <li key={rule}>{rule}</li>
                     ))}
-                </ol>
+                </ul>
             </section>
         </div>
     )
