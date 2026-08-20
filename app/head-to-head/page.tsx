@@ -1,8 +1,9 @@
 import {
     headToHeadManagers,
-    headToHeadMatrix,
     headToHeadSeasonCounts,
     headToHeadSourceGameCount,
+    getSortedHeadToHeadManagers,
+    getSortedHeadToHeadMatrix,
 } from '@/lib/head-to-head'
 import HeadToHeadSelector from './HeadToHeadSelector'
 import '../almanac.css'
@@ -11,28 +12,8 @@ export { dynamic } from '@/lib/db/route-config'
 
 export default function HeadToHeadPage() {
     const seasons = Object.entries(headToHeadSeasonCounts)
-    const sortedManagers = [...headToHeadManagers].sort((a, b) =>
-        a.localeCompare(b),
-    )
-    const matrixByManager = new Map(
-        headToHeadMatrix.map((row) => [row.manager, row]),
-    )
-    const originalManagerIndex = new Map(
-        headToHeadManagers.map((manager, index) => [manager, index]),
-    )
-    const sortedMatrix = sortedManagers.map((manager) => {
-        const sourceRow = matrixByManager.get(manager)
-        return {
-            manager,
-            records: sortedManagers.map((opponent) => {
-                const recordIndex = originalManagerIndex.get(opponent)
-                if (!sourceRow || recordIndex === undefined) {
-                    return '0-0'
-                }
-                return sourceRow.records[recordIndex] ?? '0-0'
-            }),
-        }
-    })
+    const sortedManagers = getSortedHeadToHeadManagers()
+    const sortedMatrix = getSortedHeadToHeadMatrix()
 
     return (
         <div className="container">

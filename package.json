@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "test": "tsx scripts/validate-history.ts",
     "vercel-build": "npm run migrate:dues && npm run migrate:admin-sessions && npm run db:push && next build",
     "start": "next start",
     "lint": "next lint",
