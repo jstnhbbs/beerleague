@@ -1,5 +1,5 @@
 .rules-container {
-    max-width: 800px;
+    max-width: 1120px;
     margin: 0 auto;
 }
 
@@ -12,48 +12,62 @@
     letter-spacing: -0.02em;
 }
 
+.rules-layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.rules-sidebar,
 .rules-content {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 2rem;
     box-shadow: var(--shadow-sm);
 }
 
+[data-theme='dark'] .rules-sidebar,
 [data-theme='dark'] .rules-content {
     box-shadow: var(--shadow-card-dark);
 }
 
-.rules-quick-nav {
+.rules-sidebar {
+    position: sticky;
+    top: 5rem;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--border-light);
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 1rem;
 }
 
-.rules-quick-nav a {
-    border: 1px solid var(--border-light);
-    border-radius: 999px;
-    padding: 0.4rem 0.7rem;
+.rules-sidebar-title {
+    margin-bottom: 0.5rem;
+    color: var(--foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.rules-sidebar a {
+    border-radius: 8px;
+    padding: 0.5rem 0.65rem;
     color: var(--foreground-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
     transition:
-        border-color 0.2s ease,
         color 0.2s ease,
         background-color 0.2s ease;
 }
 
-.rules-quick-nav a:hover {
+.rules-sidebar a:hover {
     background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border-color: var(--accent);
     color: var(--foreground);
 }
 
-[data-theme='dark'] .rules-quick-nav {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+.rules-content {
+    padding: 2rem;
 }
 
 .rule-section {
@@ -96,5 +110,35 @@
 @media (max-width: 768px) {
     .rules-title {
         font-size: 2rem;
+    }
+
+    .rules-layout {
+        display: block;
+    }
+
+    .rules-sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        flex-direction: row;
+        gap: 0.35rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+        padding: 0.75rem;
+        scrollbar-width: thin;
+    }
+
+    .rules-sidebar-title {
+        display: none;
+    }
+
+    .rules-sidebar a {
+        flex: 0 0 auto;
+        padding: 0.45rem 0.65rem;
+        white-space: nowrap;
+    }
+
+    .rules-content {
+        padding: 1.25rem;
     }
 }
