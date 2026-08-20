@@ -1,4 +1,20 @@
+import { KEEPER_RULES } from '@/lib/keepers'
 import './rules.css'
+
+const RULE_NAV_LINKS = [
+    { href: '#officers', label: 'Officers' },
+    { href: '#fees', label: 'Fees' },
+    { href: '#draft', label: 'Draft' },
+    { href: '#keeper-rules', label: 'Keepers' },
+    { href: '#rosters', label: 'Rosters' },
+    { href: '#scoring', label: 'Scoring' },
+    { href: '#waivers', label: 'Waivers' },
+    { href: '#trades', label: 'Trades' },
+    { href: '#playoffs', label: 'Playoffs' },
+    { href: '#sacko-playoff', label: 'Sacko Playoff' },
+    { href: '#champion-prize', label: 'Champion Prize' },
+    { href: '#sacko-punishment', label: 'Sacko Punishment' },
+] as const
 
 export default function RulesPage() {
     return (
@@ -7,13 +23,21 @@ export default function RulesPage() {
                 <h1 className="rules-title">League Rules</h1>
 
                 <div className="rules-content">
+                    <nav className="rules-quick-nav" aria-label="Rules sections">
+                        {RULE_NAV_LINKS.map((link) => (
+                            <a key={link.href} href={link.href}>
+                                {link.label}
+                            </a>
+                        ))}
+                    </nav>
+
                     <section className="rule-section">
                         <h1>Beer League Fantasy Football League Rules</h1>
                         <h2>Updated 8/19/25 PB</h2>
                         <p>Some of this information is built into the settings of the ESPN Fantasy App and mentioned here for clarity.  Other areas are decided and handled manually by the Commissioner or the League.  Everything here is written to the best of my (Paul) ability.  If an error or discrepancy exists, the Commissioner will make a decision, discuss with the officers and/or put it to a vote.  Remember, this is supposed to be fun.</p>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="officers">
                         <h2>Officers</h2>
                         <ul>
                             <li>Commissioner: Garrett</li>
@@ -22,7 +46,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="fees">
                         <h2>Fees</h2>
                         <ul>
                             <li>$20 fee paid to Treasurer</li>
@@ -30,7 +54,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="draft">
                         <h2>Draft</h2>
                         <ul>
                             <li>Snake Draft</li>
@@ -39,21 +63,16 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="keeper-rules">
                         <h2>Keepers</h2>
-                        <ul>
-                            <li>One player can be designated prior to draft as a keeper from the previous season's final roster.</li>
-                            <li>Not required to keep a player from previous roster</li>
-                            <li>Deadline for keeper designation is determined by Commissioner</li>
-                            <li>If a player was drafted, keeping them will cost you a draft pick in the round prior to the round they were drafted.  (ex: drafted in round 9, keeper will be your 8th round pick the next season).</li>
-                            <li>If a player was drafted after round 10 or an undrafted free agent, they would be considered a 10th round draft pick for keeper purposes.</li>
-                            <li>Each successive season you keep the player, will cost you the draft pick one round earlier than the previous season. (ex: drafted in round 9, kept next season for 8th round pick, third year would cost your 7th round pick).</li>
-                            <li>A player can only be kept on your roster for a maximum of 3 years.</li>
-                            <li>First round picks from the previous season cannot be kept, even if they have been on your roster for less than 3 years.</li>
-                        </ul>
+                        <ol>
+                            {KEEPER_RULES.map((rule) => (
+                                <li key={rule}>{rule}</li>
+                            ))}
+                        </ol>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="rosters">
                         <h2>Rosters</h2>
                         <ul>
                             <li>1 QB (4 max)</li>
@@ -68,7 +87,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="scoring">
                         <h2>Scoring</h2>
                         <ul>
                             <li>Half PPR (0.5 points per reception)</li>
@@ -77,7 +96,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="waivers">
                         <h2>Waivers</h2>
                         <ul>
                             <li>No limit</li>
@@ -85,7 +104,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="trades">
                         <h2>Trades</h2>
                         <ul>
                             <li>Limited to 15 trades</li>
@@ -95,7 +114,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="playoffs">
                         <h2>Playoffs</h2>
                         <ul>
                             <li>3 week playoff at the end of the regular season.</li>
@@ -104,7 +123,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="sacko-playoff">
                         <h2>Sacko Playoff</h2>
                         <ul>
                             <li>Bottom 2 teams go to Sacko Playoff</li>
@@ -114,7 +133,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="champion-prize">
                         <h2>Prize for Champion</h2>
                         <ul>
                             <li>The Champion will receive a growler (or credit toward a growler) of their choosing paid for with league dues.</li>
@@ -124,7 +143,7 @@ export default function RulesPage() {
                         </ul>
                     </section>
 
-                    <section className="rule-section">
+                    <section className="rule-section" id="sacko-punishment">
                         <h2>Sacko Punishment</h2>
                         <ul>
                             <li>Sacko will purchase $30 of “quality” beer to be delivered to the winner by Super Bowl Sunday.</li>

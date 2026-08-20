@@ -90,7 +90,12 @@ export default async function KeepersPage() {
             </div>
 
             <section className="keepers-rules">
-                <h2 className="keepers-rules-title">Keeper Rules</h2>
+                <div className="keepers-rules-heading">
+                    <h2 className="keepers-rules-title">Keeper Rules</h2>
+                    <Link href="/rules#keeper-rules" className="text-link">
+                        View in League Rules
+                    </Link>
+                </div>
                 <ol className="keepers-rules-list">
                     {KEEPER_RULES.map((rule) => (
                         <li key={rule}>{rule}</li>

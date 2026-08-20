@@ -57,11 +57,29 @@
 .keepers-rules-title {
     margin: 0;
     padding: 0.85rem 1.25rem;
-    background: var(--header-bg);
     color: var(--header-fg);
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.04em;
+}
+
+.keepers-rules-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-right: 1.25rem;
+    background: var(--header-bg);
+}
+
+.keepers-rules-heading .text-link {
+    color: var(--header-fg);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.keepers-rules-heading .text-link:hover {
+    color: var(--accent);
 }
 
 .keepers-rules-list {
@@ -113,5 +131,16 @@
         border-left: none;
         border-right: none;
         border-bottom: none;
+    }
+
+    .keepers-rules-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+        padding: 0 1.25rem 0.85rem;
+    }
+
+    .keepers-rules-title {
+        padding-left: 0;
     }
 }

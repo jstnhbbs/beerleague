@@ -11,7 +11,7 @@ export const KEEPER_RULES = [
     'You lose a round prior in next draft. (If you keep a player drafted 9th round, you lose your 8th round pick the following year.)',
     'Can only keep the player 2 additional years. Draft, then can keep them, so 3 years total.',
     "If you trade for someone, you can keep that person (as long as they weren't drafted in 1st round) and inherit their draft position.",
-    'Keepers selected as waiver, wire or free agent pick ups start at a 10th round pick.',
+    'Keepers selected as waiver wire or free agent pick ups start at a 10th round pick.',
 ] as const
 
 export function keeperSeasonLabel(): string {
