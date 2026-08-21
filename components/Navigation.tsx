@@ -35,13 +35,6 @@ export default function Navigation({ adminSession }: NavigationProps) {
         setMenuOpen(false)
     }, [pathname])
 
-    useEffect(() => {
-        document.body.style.overflow = menuOpen ? 'hidden' : ''
-        return () => {
-            document.body.style.overflow = ''
-        }
-    }, [menuOpen])
-
     return (
         <header>
             <nav className="navbar">

@@ -1,11 +1,15 @@
 import Link from 'next/link'
+import { getAdminSession } from '@/lib/auth'
 import { getLeagueSummary } from '@/lib/queries'
 import './almanac.css'
 
 export { dynamic } from '@/lib/db/route-config'
 
 export default async function Home() {
-    const summary = await getLeagueSummary()
+    const [summary, adminSession] = await Promise.all([
+        getLeagueSummary(),
+        getAdminSession(),
+    ])
 
     return (
         <div className="container">
@@ -86,6 +90,28 @@ export default async function Home() {
                         eligibility for the upcoming draft.
                     </p>
                 </Link>
+                <Link href="/rules" className="almanac-card">
+                    <h2>Rules</h2>
+                    <p>
+                        League rules, keeper details, scoring settings, and
+                        playoff structure.
+                    </p>
+                </Link>
+                <Link href="/dues" className="almanac-card">
+                    <h2>Dues</h2>
+                    <p>
+                        Current season payment status for active managers.
+                    </p>
+                </Link>
+                {adminSession && (
+                    <Link href="/admin" className="almanac-card">
+                        <h2>Admin</h2>
+                        <p>
+                            Commissioner tools for dues, keepers, season
+                            entries, and archive links.
+                        </p>
+                    </Link>
+                )}
             </div>
         </div>
     )
