@@ -41,7 +41,7 @@ export default function Navigation({ adminSession }: NavigationProps) {
                 <div className="nav-container">
                     <Link
                         href="/"
-                        className={`nav-logo ${pathname === '/' ? 'active' : ''}`}
+                        className="nav-logo"
                     >
                         Beer League Almanac
                     </Link>
