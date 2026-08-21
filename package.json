@@ -17,7 +17,8 @@
     "seed:admins": "tsx scripts/seed-admins.ts",
     "sync:history": "tsx scripts/sync-history-screenshots.ts",
     "migrate:dues": "tsx scripts/migrate-dues-season.ts",
-    "migrate:admin-sessions": "tsx scripts/migrate-admin-session-version.ts"
+    "migrate:admin-sessions": "tsx scripts/migrate-admin-session-version.ts",
+    "migrate:season-ids": "tsx scripts/migrate-season-short-ids.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
