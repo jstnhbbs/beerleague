@@ -131,6 +131,19 @@
         border-bottom: none;
     }
 
+    .keepers-table th:nth-child(1),
+    .keepers-table td:nth-child(1),
+    .keepers-table th:nth-child(6),
+    .keepers-table td:nth-child(6),
+    .keepers-table th:nth-child(7),
+    .keepers-table td:nth-child(7),
+    .keepers-table thead th:nth-child(-n + 6),
+    .keepers-table thead th:nth-child(7),
+    .keepers-table tbody tr:last-child td:nth-child(-n + 6),
+    .keepers-table tbody tr:last-child td:nth-child(7) {
+        border: none;
+    }
+
     .keepers-rules-heading {
         align-items: flex-start;
         flex-direction: column;
