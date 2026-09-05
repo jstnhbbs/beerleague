@@ -4,14 +4,17 @@ export const DEFAULT_WAIVER_ROUND = 10
 export const MAX_SEASONS_ON_ROSTER = 3
 
 export const KEEPER_RULES = [
-    'Can only keep one DRAFTED player.',
-    "You don't HAVE to have a keeper.",
-    'Player must be on roster at end of the year.',
-    "Can't keep 1st round drafted players.",
-    'You lose a round prior in next draft. (If you keep a player drafted 9th round, you lose your 8th round pick the following year.)',
-    'Can only keep the player 2 additional years. Draft, then can keep them, so 3 years total.',
-    "If you trade for someone, you can keep that person (as long as they weren't drafted in 1st round) and inherit their draft position.",
-    'Keepers selected as waiver wire or free agent pick ups start at a 10th round pick.',
+    "You don’t HAVE to have a keeper.",
+    'Each manager may keep one player from their final roster from the previous season.',
+    'A player must be on your roster at the end of the fantasy season to be eligible as your keeper. The end of the season is defined as the end of the final playoff matchup.',
+    'You cannot keep 1st round drafted players.',
+    'If a drafted player stays on your roster or is acquired by trade, their first keeper cost is one round earlier than their draft round. Each additional season they are kept costs one round earlier than the previous keeper cost. Example: a player drafted in Round 9 costs an 8th round pick the first keeper year, then a 7th round pick the next keeper year.',
+    'Any player added by you through waivers or free agency counts as a 10th round keeper in the next draft, regardless of prior draft, keeper, or roster history with another team.',
+    'A manager may not drop and re-add a player, or otherwise use waivers/free agency, for the purpose of resetting or improving that player’s keeper cost. If the commissioner determines the move was made to avoid the normal keeper cost, the player keeps their original/inherited keeper cost or may be ruled ineligible as a keeper.',
+    'If you trade for a player, you inherit that player’s draft position and keeper eligibility, as long as they were not drafted in the 1st round.',
+    'A player can only be kept for 2 additional years after you acquire them, for 3 total seasons on your roster.',
+    'If keeper eligibility, acquisition method, or draft value is unclear, the commissioner will use league draft results and transaction history as the source of truth.',
+    'Commissioner may deny keeper resets judged to be intentional circumvention.',
 ] as const
 
 export function keeperSeasonLabel(): string {
